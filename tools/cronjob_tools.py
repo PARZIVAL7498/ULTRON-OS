@@ -1019,7 +1019,7 @@ def _try_dispatch_background_run(
         # fail closed and the completion could never be claimed.
         session_key = str(session_id)
     if not session_key:
-        # Direct Python callers (`hermes cron run`, tests) have no agent
+        # Direct Python callers (`ultron cron run`, tests) have no agent
         # session to deliver a completion to — the process exits right after
         # the tool returns. Run synchronously.
         return None
@@ -1795,7 +1795,7 @@ registry.register(
         skills=args.get("skills"),
         # model / provider / base_url are intentionally NOT read from the
         # agent's arguments: per-job inference pins are user-owned (dashboard,
-        # `hermes cron create/edit --model`, or hand-edited jobs). The agent
+        # `ultron cron create/edit --model`, or hand-edited jobs). The agent
         # must not be able to point unattended spend at a different model.
         # Programmatic callers of cronjob() itself retain the parameters.
         reason=args.get("reason"),

@@ -232,7 +232,7 @@ def check_firecrawl_api_key() -> bool:
     """Return True when direct Firecrawl (or keyless explicit selection) is usable.
 
     Re-exported by :mod:`tools.web_tools` for backward compatibility with
-    existing tests and the ``hermes tools`` setup flow.
+    existing tests and the ``ultron tools`` setup flow.
     """
     return _has_direct_firecrawl_config()
 

@@ -586,7 +586,7 @@ def recommended_update_command_for_method(method: str) -> str:
         # By contract, the current "apt" install method is the Termux APT
         # distribution. It deliberately uses Termux's `pkg` frontend.
         return "pkg upgrade hermes-agent"
-    return "hermes update"
+    return "ultron update"
 
 
 def recommended_update_command() -> str:
@@ -4593,7 +4593,7 @@ def show_config():
 
     print()
     print(color("┌─────────────────────────────────────────────────────────┐", Colors.CYAN))
-    print(color("│              ⚕ Jimmy Configuration                     │", Colors.CYAN))
+    print(color("│             ⚕ Ultron Configuration                     │", Colors.CYAN))
     print(color("└─────────────────────────────────────────────────────────┘", Colors.CYAN))
 
     # Managed scope: surface that some settings are administrator-pinned so the

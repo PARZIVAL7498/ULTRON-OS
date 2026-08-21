@@ -18,7 +18,7 @@ The setup wizard installs dependencies automatically via `uv`, walks you through
 
 Or manually (cloud mode with defaults):
 ```bash
-hermes config set memory.provider hindsight
+ultron config set memory.provider hindsight
 echo "HINDSIGHT_API_KEY=your-key" >> ~/.hermes/.env
 ```
 

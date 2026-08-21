@@ -202,7 +202,7 @@ COMMAND_REGISTRY: list[CommandDef] = [
                busy_policy="dispatch", busy_handler="queue"),
     CommandDef("steer", "Inject a message after the next tool call without interrupting", "Session",
                args_hint="<prompt>", busy_policy="dispatch", busy_handler="steer"),
-    CommandDef("goal", "Set a standing goal Hermes works on across turns until achieved", "Session",
+    CommandDef("goal", "Set a standing goal Ultron works on across turns until achieved", "Session",
                args_hint="[text | draft <text> | show | gate add <cmd> | pause | resume | clear | status | wait <pid> | unwait]",
                busy_policy="dispatch", busy_handler="goal"),
     CommandDef("heartbeat", "Set a recurring prompt that re-enters this session when idle", "Session",
@@ -291,10 +291,10 @@ COMMAND_REGISTRY: list[CommandDef] = [
                subcommands=INDICATOR_STYLES),
     CommandDef("voice", "Toggle voice mode", "Configuration",
                args_hint="[on|off|tts|status]", subcommands=("on", "off", "tts", "status")),
-    CommandDef("wake", "Toggle the 'Hey Hermes' wake word listener", "Configuration",
+    CommandDef("wake", "Toggle the 'Hey Ultron' wake word listener", "Configuration",
                cli_only=True, args_hint="[on|off|status]",
                subcommands=("on", "off", "status")),
-    CommandDef("busy", "Control what Enter does while Hermes is working", "Configuration",
+    CommandDef("busy", "Control what Enter does while Ultron is working", "Configuration",
                cli_only=True, args_hint="[queue|steer|interrupt|status]",
                subcommands=("queue", "steer", "interrupt", "status")),
 
@@ -381,9 +381,9 @@ COMMAND_REGISTRY: list[CommandDef] = [
                cli_only=True),
     CommandDef("image", "Attach a local image file for your next prompt", "Info",
                cli_only=True, args_hint="<path>"),
-    CommandDef("update", "Update Jimmy to the latest version", "Info",
+    CommandDef("update", "Update Ultron to the latest version", "Info",
                busy_policy="dispatch"),
-    CommandDef("version", "Show Jimmy version", "Info", aliases=("v",),
+    CommandDef("version", "Show Ultron version", "Info", aliases=("v",),
                busy_policy="dispatch", execute="version"),
     CommandDef("debug", "Upload debug report (system info + logs) and get shareable links", "Info",
                args_hint="[nous|local]"),
@@ -1004,7 +1004,7 @@ def _collect_gateway_skill_entries(
         # Ensure each prefix ends
         # with ``/`` so ``/my-skills`` does not also match ``/my-skills-extra``.
         # Without this widening, external skills are visible in
-        # ``hermes skills list`` and the agent's ``/skill-name`` dispatch but
+        # ``ultron skills list`` and the agent's ``/skill-name`` dispatch but
         # silently excluded from gateway slash menus (#8110).
         _allowed_prefixes = [_skills_dir.rstrip("/") + "/"]
         _allowed_prefixes.extend(
@@ -1064,7 +1064,7 @@ def telegram_menu_commands(max_commands: int = 100) -> tuple[list[tuple[str, str
 
     Skills are the only tier that gets trimmed when the cap is hit.
     User-installed hub skills are excluded — accessible via /skills.
-    Skills disabled for the ``"telegram"`` platform (via ``hermes skills
+    Skills disabled for the ``"telegram"`` platform (via ``ultron skills
     config``) are excluded from the menu entirely.
 
     Returns:
@@ -1133,7 +1133,7 @@ def discord_skill_commands_by_category(
     Scan roots include the local ``SKILLS_DIR`` **and** any configured
     ``skills.external_dirs`` — matching the widened filter applied to the
     flat ``discord_skill_commands()`` collector in #18741. Without this
-    parity, external-dir skills are visible via ``hermes skills list`` and
+    parity, external-dir skills are visible via ``ultron skills list`` and
     the agent's ``/skill-name`` dispatch but silently absent from Discord's
     ``/skill`` autocomplete.
 
@@ -1315,54 +1315,54 @@ _SLACK_RESERVED_COMMANDS = frozenset({
 # long-standing native slash like /btw could disappear just because an
 # unrelated command landed. These claim their slots right after /hermes,
 # ahead of both canonical names and the rest of the aliases. Anything not
-# listed here still degrades gracefully (reachable via /hermes <command>).
+# listed here still degrades gracefully (reachable via /ultron <command>).
 # Keep this list TIGHT: every pinned alias takes a slot a canonical command
 # would otherwise get, and the Telegram-parity test fails when a canonical
 # gets clamped ("reset" was unpinned for exactly that — /new keeps its
-# native slot, the alias spelling stays reachable via /hermes reset).
+# native slot, the alias spelling stays reachable via /ultron reset).
 _SLACK_PRIORITY_ALIASES = ("btw", "bg")
 
 # Canonical commands intentionally NOT given a native Slack slash slot. Slack
 # caps apps at 50 slash commands and the registry is at that ceiling; rather
 # than let the clamp silently drop whichever command sorts last (and break
 # Telegram parity), we explicitly route a few low-frequency commands through
-# ``/hermes <command>`` on Slack only. They remain native on every other
+# ``/ultron <command>`` on Slack only. They remain native on every other
 # surface (CLI, TUI, Telegram, Discord). Keep this list TIGHT and intentional —
 # the telegram-parity test reads it so an entry here is a deliberate
 # "Slack-via-/hermes" decision, not a silent clamp.
-#   - topup: the billing/balance surface; reached via /hermes topup on Slack.
+#   - topup: the billing/balance surface; reached via /ultron topup on Slack.
 #     (the rehaul folded the old /credits + /billing surfaces into /topup.)
-#   - moa: high-cost slash mode, available through /hermes moa to avoid
+#   - moa: high-cost slash mode, available through /ultron moa to avoid
 #     displacing existing native Slack slash commands at the 50-command cap.
-#   - debug: the log/report upload surface; reached via /hermes debug on Slack.
-#   - egress: Docker-only proxy status; reachable as /hermes egress on Slack.
+#   - debug: the log/report upload surface; reached via /ultron debug on Slack.
+#   - egress: Docker-only proxy status; reachable as /ultron egress on Slack.
 #   - init: repo-scan AGENTS.md bootstrap — a cwd-centric dev command that is
-#     rare from Slack; reachable as /hermes init. Without this entry, adding
+#     rare from Slack; reachable as /ultron init. Without this entry, adding
 #     /init clamps /version off the native list and breaks Telegram parity.
-#   - version: low-frequency info command; reachable as /hermes version on
+#   - version: low-frequency info command; reachable as /ultron version on
 #     Slack. Demoted when /context claimed a native slot (context is a
 #     recurring inspection surface; version is a one-off lookup); the demotion
 #     also absorbs the native slot /approvals now consumes at the 50-cap.
-#   - diff: git working-tree diff; reached via /hermes diff on Slack so it
+#   - diff: git working-tree diff; reached via /ultron diff on Slack so it
 #     doesn't displace an existing native slash at the 50-command cap.
 #   - update: low-frequency self-update maintenance command; reached via
-#     /hermes update on Slack. Demoted to free the native slot /approvals now
+#     /ultron update on Slack. Demoted to free the native slot /approvals now
 #     claims — without this entry /approvals tips the registry past the 50-cap
 #     and silently clamps /update off, breaking Telegram parity.
-#   - heartbeat: session heartbeat management; reached via /hermes heartbeat
+#   - heartbeat: session heartbeat management; reached via /ultron heartbeat
 #     on Slack. Added at the 50-cap — a native slot would clamp /insights.
-#   - refine: on-demand memory/skill review; reached via /hermes refine on
+#   - refine: on-demand memory/skill review; reached via /ultron refine on
 #     Slack. Added at the 50-cap — a native slot would clamp an existing
 #     native slash.
-#   - pause: global emergency stop; reached via /hermes pause [off] on
+#   - pause: global emergency stop; reached via /ultron pause [off] on
 #     Slack. Added at the 50-cap — a native slot would clamp /platform.
-#   - whoami: one-off identity lookup; reached via /hermes whoami on Slack.
+#   - whoami: one-off identity lookup; reached via /ultron whoami on Slack.
 #     Demoted when /loop claimed a native slot (loop is a recurring
 #     interactive surface; whoami is a rare debug lookup) — without this
 #     entry /loop tips the registry past the 50-cap and silently clamps
 #     /platform, breaking Telegram parity.
 #   - platform: informational platform/environment lookup; reached via
-#     /hermes platform on Slack. Demoted when /save became gateway-available
+#     /ultron platform on Slack. Demoted when /save became gateway-available
 #     (session export is an interactive surface; platform is a rare
 #     informational lookup) — without this entry /save tips the registry
 #     past the 50-cap and silently clamps /platform, breaking parity.
@@ -1387,7 +1387,7 @@ def slack_native_slashes() -> list[tuple[str, str, str]]:
     Every gateway-available command in ``COMMAND_REGISTRY`` is surfaced as
     a standalone Slack slash command (e.g. ``/btw``, ``/stop``, ``/model``),
     matching Discord's and Telegram's model where every command is a
-    first-class slash and not a ``/hermes <verb>`` subcommand.
+    first-class slash and not a ``/ultron <verb>`` subcommand.
 
     Both canonical names and aliases are included so users can type any
     documented form (e.g. ``/background``, ``/bg``, and ``/btw`` all work).
@@ -1395,18 +1395,18 @@ def slack_native_slashes() -> list[tuple[str, str, str]]:
 
     Commands whose sanitized name collides with a Slack built-in
     (e.g. ``/status``, ``/me``, ``/join``) are silently skipped.  Users
-    can still reach them via ``/hermes <command>``.
+    can still reach them via ``/ultron <command>``.
 
     Results are clamped to Slack's 50-command limit with duplicate-name
     avoidance. ``/hermes`` is always reserved as the first entry so the
-    legacy ``/hermes <subcommand>`` form keeps working for anything that
+    legacy ``/ultron <subcommand>`` form keeps working for anything that
     gets dropped by the clamp or for free-form questions.
     """
     overrides = _resolve_config_gates()
     entries: list[tuple[str, str, str]] = []
     seen: set[str] = set()
 
-    # Reserve /hermes as the catch-all top-level command.
+    # Reserve /ultron as the catch-all top-level command.
     entries.append(("hermes", "Talk to Hermes or run a subcommand", "[subcommand] [args]"))
     seen.add("hermes")
 
@@ -1417,7 +1417,7 @@ def slack_native_slashes() -> list[tuple[str, str, str]]:
         if slack_name in _SLACK_RESERVED_COMMANDS:
             return
         if slack_name in _SLACK_VIA_HERMES_ONLY:
-            # Intentionally Slack-via-/hermes only (see _SLACK_VIA_HERMES_ONLY).
+            # Intentionally Slack-via-/ultron only (see _SLACK_VIA_HERMES_ONLY).
             return
         if len(entries) >= _SLACK_MAX_SLASH_COMMANDS:
             return
@@ -1490,12 +1490,12 @@ def slack_app_manifest(request_url: str = "https://hermes-agent.local/slack/comm
 
 
 def slack_subcommand_map() -> dict[str, str]:
-    """Return subcommand -> /command mapping for Slack /hermes handler.
+    """Return subcommand -> /command mapping for Slack /ultron handler.
 
-    Maps both canonical names and aliases so /hermes bg do stuff works
-    the same as /hermes background do stuff.
+    Maps both canonical names and aliases so /ultron bg do stuff works
+    the same as /ultron background do stuff.
 
-    Plugin-registered slash commands are included so ``/hermes <plugin-cmd>``
+    Plugin-registered slash commands are included so ``/ultron <plugin-cmd>``
     routes through the plugin handler.
     """
     overrides = _resolve_config_gates()

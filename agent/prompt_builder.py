@@ -148,7 +148,7 @@ def _strip_yaml_frontmatter(content: str) -> str:
 # =========================================================================
 
 DEFAULT_AGENT_IDENTITY = (
-    "You are Jimmy, an intelligent AI assistant. "
+    "You are Ultron, an intelligent AI assistant. "
     "You are helpful, knowledgeable, and direct. You assist users with a wide "
     "range of tasks including answering questions, writing and editing code, "
     "analyzing information, creative work, and executing actions via your tools. "
@@ -158,8 +158,8 @@ DEFAULT_AGENT_IDENTITY = (
 )
 
 HERMES_AGENT_HELP_GUIDANCE = (
-    "You run on Jimmy. When the user needs help with "
-    "Jimmy itself — configuring, setting up, using, extending, or troubleshooting "
+    "You run on Ultron. When the user needs help with "
+    "Ultron itself — configuring, setting up, using, extending, or troubleshooting "
     "it — or when you need to understand your own features, tools, or capabilities, "
     "use your available tools and local config/docs in this installation. "
     "Prefer the project's AGENTS.md and local skills over external product docs."
@@ -331,12 +331,12 @@ KANBAN_GUIDANCE = (
     "or paste ids; the kernel rejects the completion on any phantom id.\n"
     "- **Orchestrating: discover profiles first.** The dispatcher SILENTLY "
     "drops a card with an unknown assignee (it sits in `ready` forever). Ground "
-    "every assignee in a real profile (`hermes profile list`, or ask the user), "
+    "every assignee in a real profile (`ultron profile list`, or ask the user), "
     "and express dependencies via `parents=[...]` on `kanban_create`, not prose.\n"
     "\n"
     "## Do NOT\n"
     "\n"
-    "- Do not shell out to `hermes kanban <verb>` for board operations. Use "
+    "- Do not shell out to `ultron kanban <verb>` for board operations. Use "
     "the `kanban_*` tools — they work across all terminal backends.\n"
     "- Do not complete a task you didn't actually finish. Block it.\n"
     "- Do not call `clarify` to ask questions. You are running headless — "
@@ -737,7 +737,7 @@ def computer_use_guidance(platform_name: Optional[str] = None) -> str:
         "## When something is broken\n"
         "If `computer_use` consistently fails (empty captures, missing "
         "elements, clicks not landing, type going nowhere), ask the user to "
-        "run `hermes computer-use doctor` and share the output. That command "
+        "run `ultron computer-use doctor` and share the output. That command "
         "runs cua-driver's structured health-report — per-platform checks "
         "for permissions, display server, accessibility tree reachability "
         "— and the failure message tells you exactly what to fix.\n"
@@ -2176,10 +2176,10 @@ def _build_skills_system_prompt_inner(
             "for tasks like code review, planning, and testing — load them even for tasks you "
             "already know how to do, because the skill defines how it should be done here.\n"
             "Whenever the user asks you to configure, set up, install, enable, disable, modify, "
-            "or troubleshoot Jimmy itself — its CLI, config, models, providers, tools, "
+            "or troubleshoot Ultron itself — its CLI, config, models, providers, tools, "
             "skills, voice, gateway, plugins, or any feature — load the `hermes-agent` skill "
-            "first. It has the actual commands (e.g. `hermes config set …`, `hermes tools`, "
-            "`hermes setup`) so you don't have to guess or invent workarounds.\n"
+            "first. It has the actual commands (e.g. `ultron config set …`, `ultron tools`, "
+            "`ultron setup`) so you don't have to guess or invent workarounds.\n"
             "If a skill has issues, fix it with skill_manage(action='patch').\n"
             "After difficult/iterative tasks, offer to save as a skill. "
             "If a skill you loaded was missing steps, had wrong commands, or needed "

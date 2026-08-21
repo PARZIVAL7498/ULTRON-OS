@@ -4,11 +4,11 @@ Traces Hermes conversations, LLM calls, and tool usage to Langfuse.
 
 Activation is handled by the Hermes plugin system — standalone plugins only
 load when listed in ``plugins.enabled`` (via ``hermes plugins enable
-observability/langfuse`` or ``hermes tools → Langfuse Observability``). At
+observability/langfuse`` or ``ultron tools → Langfuse Observability``). At
 runtime the plugin also requires the ``langfuse`` SDK and credentials; if
 either is missing the hooks are inert.
 
-Required env vars (set via ``hermes tools`` or ~/.hermes/.env):
+Required env vars (set via ``ultron tools`` or ~/.hermes/.env):
   HERMES_LANGFUSE_PUBLIC_KEY  - Langfuse project public key (pk-lf-...)
   HERMES_LANGFUSE_SECRET_KEY  - Langfuse project secret key (sk-lf-...)
   HERMES_LANGFUSE_BASE_URL    - Langfuse server URL (default: https://cloud.langfuse.com)
@@ -282,7 +282,7 @@ def _get_langfuse() -> Optional[Langfuse]:
         if Langfuse is None:
             logger.warning(
                 "Langfuse plugin is enabled but the langfuse SDK is unavailable; "
-                "tracing is disabled. Run `hermes tools` and configure Langfuse "
+                "tracing is disabled. Run `ultron tools` and configure Langfuse "
                 "Observability to reinstall it."
             )
             _LANGFUSE_CLIENT = _INIT_FAILED
@@ -351,7 +351,7 @@ def _get_langfuse() -> Optional[Langfuse]:
         # atexit is LIFO: registering AFTER the SDK's constructor (which installs
         # its own shutdown flush) means our finalizer runs FIRST at exit — root
         # spans ended there are still picked up by the SDK's exporter. Closes the
-        # short-lived-process gap (kanban workers / hermes chat -q / cron): exit
+        # short-lived-process gap (kanban workers / ultron chat -q / cron): exit
         # with tool calls still queued left the root span un-ended → anonymous
         # trace with no name/session/metadata on the backend.
         try:
@@ -1027,7 +1027,7 @@ def _finalize_all_traces() -> None:
 
     Gateway turns normally end their root span via ``_finish_trace`` (final
     assistant message with no tool calls). But short-lived CLI processes —
-    kanban workers, ``hermes chat -q`` one-shots, cron jobs — can exit while
+    kanban workers, ``ultron chat -q`` one-shots, cron jobs — can exit while
     the last LLM call still has tool calls queued, leaving the root span
     un-ended. Ended children DO export via the SDK's own atexit flush, so the
     backend shows an anonymous trace (no name/session/metadata) whose

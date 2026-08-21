@@ -241,7 +241,7 @@ def default_downgrade_notice() -> Optional[str]:
             pass
         return (
             "Browser Use CLI not found — using the built-in browser tools. "
-            "Run `hermes tools` (Browser Automation → Browser Use) to install it, "
+            "Run `ultron tools` (Browser Automation → Browser Use) to install it, "
             "or `browser.backend: off` in config.yaml to silence this."
         )
     except Exception as e:  # pragma: no cover — a notice must never break startup
@@ -318,7 +318,7 @@ def install_cli(timeout_s: int = 600) -> Tuple[bool, str]:
     # browser-use found on PATH is a user-level side install — it must NOT
     # prevent provisioning the canonical Hermes-managed copy, or resolution
     # stays pinned to a binary we don't control (version drift, no updates
-    # through hermes tools).
+    # through ultron tools).
     bin_dir = _managed_bin_dir()
     if bin_dir:
         managed = shutil.which("browser-use", path=bin_dir)
@@ -528,7 +528,7 @@ def _resolve_backend_cdp(
         return (
             f"Cloud browser provider {type(provider).__name__} failed to "
             f"provide a session: {e}. Fix the provider configuration or "
-            "switch backends via `hermes tools` → Browser Automation."
+            "switch backends via `ultron tools` → Browser Automation."
         )
     cdp = str((session_info or {}).get("cdp_url") or "")
     if not cdp:

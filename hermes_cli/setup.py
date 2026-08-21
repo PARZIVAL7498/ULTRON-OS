@@ -147,7 +147,7 @@ from hermes_cli.config import (
     get_env_value,
     ensure_hermes_home,
 )
-# display_hermes_home imported lazily at call sites (stale-module safety during hermes update)
+# display_hermes_home imported lazily at call sites (stale-module safety during ultron update)
 
 from hermes_cli.colors import Colors, color
 
@@ -181,19 +181,19 @@ def is_interactive_stdin() -> bool:
 def print_noninteractive_setup_guidance(reason: str | None = None) -> None:
     """Print guidance for headless/non-interactive setup flows."""
     print()
-    print(color("⚕ Jimmy Setup — Non-interactive mode", Colors.CYAN, Colors.BOLD))
+    print(color("⚕ Ultron Setup — Non-interactive mode", Colors.CYAN, Colors.BOLD))
     print()
     if reason:
         print_info(reason)
     print_info("The interactive wizard cannot be used here.")
     print()
     print_info("Configure Hermes using environment variables or config commands:")
-    print_info("  hermes config set model.provider custom")
-    print_info("  hermes config set model.base_url http://localhost:8080/v1")
-    print_info("  hermes config set model.default your-model-name")
+    print_info("  ultron config set model.provider custom")
+    print_info("  ultron config set model.base_url http://localhost:8080/v1")
+    print_info("  ultron config set model.default your-model-name")
     print()
     print_info("Or set OPENROUTER_API_KEY / OPENAI_API_KEY in your environment.")
-    print_info("Run 'hermes setup' in an interactive terminal to use the full wizard.")
+    print_info("Run 'ultron setup' in an interactive terminal to use the full wizard.")
     print()
 
 
@@ -390,7 +390,7 @@ def _prompt_api_key(var: dict):
         save_env_value(var["name"], value)
         print_success("  ✓ Saved")
     else:
-        print_warning("  Skipped (configure later with 'hermes setup')")
+        print_warning("  Skipped (configure later with 'ultron setup')")
 
 
 def _print_setup_summary(config: dict, hermes_home):
@@ -411,8 +411,8 @@ def _print_setup_summary(config: dict, hermes_home):
         print()
         print_warning("No inference provider is configured — Hermes cannot chat yet.")
         print_info("  Finish this one step with either of:")
-        print_info("    hermes model            (pick any provider/model)")
-        print_info("    hermes setup --portal   (Nous Portal OAuth, no API key)")
+        print_info("    ultron model            (pick any provider/model)")
+        print_info("    ultron setup --portal   (Nous Portal OAuth, no API key)")
 
     # Tool availability summary
     print()
@@ -431,7 +431,7 @@ def _print_setup_summary(config: dict, hermes_home):
     if _vision_backends:
         tool_status.append(("Vision (image analysis)", True, None))
     else:
-        tool_status.append(("Vision (image analysis)", False, "run 'hermes setup' to configure"))
+        tool_status.append(("Vision (image analysis)", False, "run 'ultron setup' to configure"))
 
 
     # Web tools (Exa, Parallel, Firecrawl, or Tavily)
@@ -506,7 +506,7 @@ def _print_setup_summary(config: dict, hermes_home):
         else:
             tool_status.append(("Image Generation", False, "FAL_KEY or OPENAI_API_KEY"))
 
-    # Video generation — opt-in via `hermes tools` → Video Generation.
+    # Video generation — opt-in via `ultron tools` → Video Generation.
     # Only show the row when a plugin reports available so we don't badger
     # users who don't care about video gen with a "missing" status line.
     if subscription_features.video_gen.managed_by_nous:
@@ -553,7 +553,7 @@ def _print_setup_summary(config: dict, hermes_home):
         if neutts_ok:
             tool_status.append(("Text-to-Speech (NeuTTS local)", True, None))
         else:
-            tool_status.append(("Text-to-Speech (NeuTTS — not installed)", False, "run 'hermes setup tts'"))
+            tool_status.append(("Text-to-Speech (NeuTTS — not installed)", False, "run 'ultron setup tts'"))
     elif tts_provider == "kittentts":
         try:
             kittentts_ok = importlib.util.find_spec("kittentts") is not None
@@ -562,7 +562,7 @@ def _print_setup_summary(config: dict, hermes_home):
         if kittentts_ok:
             tool_status.append(("Text-to-Speech (KittenTTS local)", True, None))
         else:
-            tool_status.append(("Text-to-Speech (KittenTTS — not installed)", False, "run 'hermes setup tts'"))
+            tool_status.append(("Text-to-Speech (KittenTTS — not installed)", False, "run 'ultron setup tts'"))
     else:
         tool_status.append(("Text-to-Speech (Edge TTS)", True, None))
 
@@ -592,7 +592,7 @@ def _print_setup_summary(config: dict, hermes_home):
             tool_status.append(("Speech-to-Text (Local Whisper)", True, None))
         else:
             tool_status.append(
-                ("Speech-to-Text (Local Whisper — not installed)", False, "run 'hermes tools' → Speech-to-Text")
+                ("Speech-to-Text (Local Whisper — not installed)", False, "run 'ultron tools' → Speech-to-Text")
             )
 
     if subscription_features.modal.managed_by_nous:
@@ -601,14 +601,14 @@ def _print_setup_summary(config: dict, hermes_home):
         if subscription_features.modal.direct_override:
             tool_status.append(("Modal Execution (direct Modal)", True, None))
         else:
-            tool_status.append(("Modal Execution", False, "run 'hermes setup terminal'"))
+            tool_status.append(("Modal Execution", False, "run 'ultron setup terminal'"))
     # Nous-managed Modal path removed.
 
     # Home Assistant
     if get_env_value("HASS_TOKEN"):
         tool_status.append(("Smart Home (Home Assistant)", True, None))
 
-    # Spotify (OAuth via hermes auth spotify — check auth.json, not env vars)
+    # Spotify (OAuth via ultron auth spotify — check auth.json, not env vars)
     try:
         from hermes_cli.auth import get_provider_auth_state
         _spotify_state = get_provider_auth_state("spotify") or {}
@@ -652,7 +652,7 @@ def _print_setup_summary(config: dict, hermes_home):
     disabled_tools = [(name, var) for name, avail, var in tool_status if not avail]
     if disabled_tools:
         print_warning(
-            "Some tools are disabled. Run 'hermes setup tools' to configure them,"
+            "Some tools are disabled. Run 'ultron setup tools' to configure them,"
         )
         from hermes_constants import display_hermes_home as _dhh
         print_warning(f"or edit {_dhh()}/.env directly to add the missing API keys.")
@@ -692,17 +692,17 @@ def _print_setup_summary(config: dict, hermes_home):
     print()
     print(color("📝 To edit your configuration:", Colors.CYAN, Colors.BOLD))
     print()
-    print(f"   {color('hermes setup', Colors.GREEN)}          Re-run the full wizard")
-    print(f"   {color('hermes setup model', Colors.GREEN)}    Change model/provider")
-    print(f"   {color('hermes setup terminal', Colors.GREEN)} Change terminal backend")
-    print(f"   {color('hermes setup gateway', Colors.GREEN)}  Configure messaging")
-    print(f"   {color('hermes setup tools', Colors.GREEN)}    Configure tool providers")
+    print(f"   {color('ultron setup', Colors.GREEN)}          Re-run the full wizard")
+    print(f"   {color('ultron setup model', Colors.GREEN)}    Change model/provider")
+    print(f"   {color('ultron setup terminal', Colors.GREEN)} Change terminal backend")
+    print(f"   {color('ultron setup gateway', Colors.GREEN)}  Configure messaging")
+    print(f"   {color('ultron setup tools', Colors.GREEN)}    Configure tool providers")
     print()
-    print(f"   {color('hermes config', Colors.GREEN)}         View current settings")
+    print(f"   {color('ultron config', Colors.GREEN)}         View current settings")
     print(
-        f"   {color('hermes config edit', Colors.GREEN)}    Open config in your editor"
+        f"   {color('ultron config edit', Colors.GREEN)}    Open config in your editor"
     )
-    print(f"   {color('hermes config set <key> <value>', Colors.GREEN)}")
+    print(f"   {color('ultron config set <key> <value>', Colors.GREEN)}")
     print("                          Set a specific value")
     print()
     print("   Or edit the files directly:")
@@ -715,8 +715,8 @@ def _print_setup_summary(config: dict, hermes_home):
     print(color("🚀 Ready to go!", Colors.CYAN, Colors.BOLD))
     print()
     print(f"   {color('hermes', Colors.GREEN)}              Start chatting")
-    print(f"   {color('hermes gateway', Colors.GREEN)}      Start messaging gateway")
-    print(f"   {color('hermes doctor', Colors.GREEN)}       Check for issues")
+    print(f"   {color('ultron gateway', Colors.GREEN)}      Start messaging gateway")
+    print(f"   {color('ultron doctor', Colors.GREEN)}       Check for issues")
     print()
 
 
@@ -859,7 +859,7 @@ def _read_nearest_vercel_project(start: Path | None = None) -> dict[str, str]:
 
 
 # Tool categories and provider config are now in tools_config.py (shared
-# between `hermes tools` and `hermes setup tools`).
+# between `ultron tools` and `ultron setup tools`).
 
 
 # =============================================================================
@@ -871,10 +871,10 @@ def _read_nearest_vercel_project(start: Path | None = None) -> dict[str, str]:
 def setup_model_provider(config: dict, *, quick: bool = False):
     """Configure the inference provider and default model.
 
-    Delegates to ``cmd_model()`` (the same flow used by ``hermes model``)
+    Delegates to ``cmd_model()`` (the same flow used by ``ultron model``)
     for provider selection, credential prompting, and model picking.
     This ensures a single code path for all provider setup — any new
-    provider added to ``hermes model`` is automatically available here.
+    provider added to ``ultron model`` is automatically available here.
 
     When *quick* is True, skips credential rotation, vision, and TTS
     configuration — used by the streamlined first-time quick setup.
@@ -886,7 +886,7 @@ def setup_model_provider(config: dict, *, quick: bool = False):
     print_info(f"   Guide: {_DOCS_BASE}/integrations/providers")
     print()
 
-    # Delegate to the shared hermes model flow — handles provider picker,
+    # Delegate to the shared ultron model flow — handles provider picker,
     # credential prompting, model selection, and config persistence.
     from hermes_cli.main import select_provider_and_model
     try:
@@ -897,7 +897,7 @@ def setup_model_provider(config: dict, *, quick: bool = False):
     except Exception as exc:
         logger.debug("select_provider_and_model error during setup: %s", exc)
         print_warning(f"Provider setup encountered an error: {exc}")
-        print_info("You can try again later with: hermes model")
+        print_info("You can try again later with: ultron model")
 
     # Re-sync the wizard's config dict from what cmd_model saved to disk.
     # This is critical: cmd_model writes to disk via its own load/save cycle,
@@ -912,8 +912,8 @@ def setup_model_provider(config: dict, *, quick: bool = False):
     # Credential rotation, vision-backend selection, and TTS provider are no
     # longer prompted here. They have safe defaults (rotation off, vision
     # auto-detected from the main provider, TTS = Edge) and are configurable
-    # on demand via `hermes auth add`, `hermes setup` vision, and
-    # `hermes setup tts`. This keeps both quick and full setup thin.
+    # on demand via `ultron auth add`, `ultron setup` vision, and
+    # `ultron setup tts`. This keeps both quick and full setup thin.
 
 
     # Tool Gateway prompt is already shown by _model_flow_nous() above.
@@ -1019,7 +1019,7 @@ def _xai_oauth_logged_in_for_setup() -> bool:
     """True iff xAI Grok OAuth credentials are already stored locally.
 
     Lets TTS / STT setup skip the API-key prompt for users who logged in
-    through ``hermes model`` -> xAI Grok OAuth (SuperGrok / Premium+).
+    through ``ultron model`` -> xAI Grok OAuth (SuperGrok / Premium+).
     """
     try:
         from hermes_cli.auth import get_xai_oauth_auth_status
@@ -1221,7 +1221,7 @@ def _setup_tts_provider(config: dict):
                     from hermes_constants import display_hermes_home as _dhh
                     print_warning(
                         "No xAI API key provided for TTS. Configure XAI_API_KEY "
-                        f"via hermes setup model or {_dhh()}/.env to use xAI TTS. "
+                        f"via ultron setup model or {_dhh()}/.env to use xAI TTS. "
                         "Falling back to Edge TTS."
                     )
                     selected = "edge"
@@ -1305,7 +1305,7 @@ def _setup_tts_provider(config: dict):
 
 
 def setup_tts(config: dict):
-    """Standalone TTS setup (for 'hermes setup tts')."""
+    """Standalone TTS setup (for 'ultron setup tts')."""
     _setup_tts_provider(config)
 
 
@@ -1366,7 +1366,7 @@ def setup_terminal_backend(config: dict):
         print_success("Terminal backend: Local")
         print_info("Commands run directly on this machine.")
         # Gateway working directory defaults to home; sudo stays off. Both are
-        # configurable later via `hermes setup terminal` / config.yaml.
+        # configurable later via `ultron setup terminal` / config.yaml.
         config["terminal"].setdefault("cwd", str(Path.home()))
 
     elif selected_backend == "docker":
@@ -1380,7 +1380,7 @@ def setup_terminal_backend(config: dict):
         else:
             print_info(f"Docker found: {docker_bin}")
 
-        # Image and resource limits use defaults; tune via `hermes setup terminal`.
+        # Image and resource limits use defaults; tune via `ultron setup terminal`.
         config["terminal"].setdefault(
             "docker_image", "nikolaik/python-nodejs:python3.11-nodejs20"
         )
@@ -1420,7 +1420,7 @@ def setup_terminal_backend(config: dict):
         else:
             print_info(f"Found: {sing_bin}")
 
-        # Image and resource limits use defaults; tune via `hermes setup terminal`.
+        # Image and resource limits use defaults; tune via `ultron setup terminal`.
         config["terminal"].setdefault(
             "singularity_image",
             "docker://nikolaik/python-nodejs:python3.11-nodejs20",
@@ -1504,7 +1504,7 @@ def setup_terminal_backend(config: dict):
                 save_env_value("DAYTONA_API_KEY", api_key)
                 print_success("    Configured")
 
-        # Image and resource limits use defaults; tune via `hermes setup terminal`.
+        # Image and resource limits use defaults; tune via `ultron setup terminal`.
         config["terminal"].setdefault(
             "daytona_image", "nikolaik/python-nodejs:python3.11-nodejs20"
         )
@@ -1639,7 +1639,7 @@ def _apply_default_agent_settings(config: dict):
     print_info("  Tool progress: all")
     print_info("  Compression threshold: 0.50")
     print_info("  Session reset: never (use /reset or compression)")
-    print_info("  Run `hermes setup agent` later to customize.")
+    print_info("  Run `ultron setup agent` later to customize.")
 
 
 def setup_agent_settings(config: dict):
@@ -2104,8 +2104,8 @@ def _setup_webhooks():
     print_info("   Route configuration guide:")
     print_info("   https://hermes-agent.nousresearch.com/docs/user-guide/messaging/webhooks/#configuring-routes")
     print()
-    print_info("   Open config in your editor:  hermes config edit")
-    print_info("   Open config in your editor:  hermes config edit")
+    print_info("   Open config in your editor:  ultron config edit")
+    print_info("   Open config in your editor:  ultron config edit")
 
 
 def setup_gateway(config: dict):
@@ -2131,7 +2131,7 @@ def setup_gateway(config: dict):
     selected = prompt_checklist("Select platforms to configure:", items, pre_selected)
 
     if not selected:
-        print_info("No platforms selected. Run 'hermes setup gateway' later to configure.")
+        print_info("No platforms selected. Run 'ultron setup gateway' later to configure.")
     else:
         for idx in selected:
             _configure_platform(platforms[idx])
@@ -2183,14 +2183,14 @@ def setup_gateway(config: dict):
             print_info("   Set one later with /set-home in your chat, or:")
             for plat in missing_home:
                 print_info(
-                    f"     hermes config set {plat.upper()}_HOME_CHANNEL <channel_id>"
+                    f"     ultron config set {plat.upper()}_HOME_CHANNEL <channel_id>"
                 )
 
     # ── Gateway Service Setup ──
     # Runs UNCONDITIONALLY — even with zero platforms configured. A gateway
     # without platforms is a supported mode (cron scheduler keeps running,
     # and adapters come up automatically once tokens are added later, e.g.
-    # via `hermes import` or `hermes setup gateway`). Gating this on
+    # via `hermes import` or `ultron setup gateway`). Gating this on
     # messaging config was the bug that left install-then-import machines
     # with registered cron jobs and restored bot tokens but no process to
     # serve them.
@@ -2257,7 +2257,7 @@ def setup_gateway(config: dict):
 def setup_tools(config: dict, first_install: bool = False):
     """Configure tools — delegates to the unified tools_command() in tools_config.py.
 
-    Both `hermes setup tools` and `hermes tools` use the same flow:
+    Both `ultron setup tools` and `ultron tools` use the same flow:
     platform selection → toolset toggles → provider/API key configuration.
 
     Args:
@@ -2717,8 +2717,8 @@ def _run_portal_one_shot(config: dict) -> None:
     """Nous Portal one-shot setup was removed."""
     print()
     print_warning("Nous Portal / Tool Gateway setup was removed.")
-    print_info("  Configure a model with `hermes model`.")
-    print_info("  Configure tools with `hermes tools`.")
+    print_info("  Configure a model with `ultron model`.")
+    print_info("  Configure tools with `ultron tools`.")
 
 
 
@@ -2726,14 +2726,14 @@ def run_setup_wizard(args):
     """Run the interactive setup wizard.
 
     Supports full, quick, and section-specific setup:
-      hermes setup           — full or quick (auto-detected)
-      hermes setup model     — just model/provider
-      hermes setup tts       — just text-to-speech
-      hermes setup terminal  — just terminal backend
-      hermes setup gateway   — just messaging platforms
-      hermes setup tools     — just tool configuration
-      hermes setup telemetry — just local shared metrics
-      hermes setup agent     — just agent settings
+      ultron setup           — full or quick (auto-detected)
+      ultron setup model     — just model/provider
+      ultron setup tts       — just text-to-speech
+      ultron setup terminal  — just terminal backend
+      ultron setup gateway   — just messaging platforms
+      ultron setup tools     — just tool configuration
+      ultron setup telemetry — just local shared metrics
+      ultron setup agent     — just agent settings
     """
     from hermes_cli.config import is_managed, managed_error
     if is_managed():
@@ -2795,7 +2795,7 @@ def run_setup_wizard(args):
                         Colors.MAGENTA,
                     )
                 )
-                print(color(f"│     ⚕ Jimmy Setup — {label:<34s} │", Colors.MAGENTA))
+                print(color(f"│     ⚕ Ultron Setup — {label:<34s} │", Colors.MAGENTA))
                 print(
                     color(
                         "└─────────────────────────────────────────────────────────┘",
@@ -2831,7 +2831,7 @@ def run_setup_wizard(args):
     )
     print(
         color(
-            "│             ⚕ Jimmy Setup Wizard                       │", Colors.MAGENTA
+            "│             ⚕ Ultron Setup Wizard                      │", Colors.MAGENTA
         )
     )
     print(
@@ -2842,7 +2842,7 @@ def run_setup_wizard(args):
     )
     print(
         color(
-            "│  Let's configure your Jimmy installation.              │", Colors.MAGENTA
+            "│  Let's configure your Ultron installation.             │", Colors.MAGENTA
         )
     )
     print(
@@ -2875,7 +2875,7 @@ def run_setup_wizard(args):
         print_info("Running the full wizard — each prompt shows your current value.")
         print_info("Press Enter to keep it, or type a new value to change it.")
         print_info("")
-        print_info("Tip: jump straight to a section with 'hermes setup model|terminal|")
+        print_info("Tip: jump straight to a section with 'ultron setup model|terminal|")
         print_info("     gateway|tools|agent', or fill only missing items with --quick.")
         # Fall through to the "Full Setup — run all sections" block below.
         # --reconfigure is now the default on existing installs; the flag
@@ -2919,7 +2919,7 @@ def run_setup_wizard(args):
     print_info(f"Data folder:  {hermes_home}")
     print_info(f"Install dir:  {PROJECT_ROOT}")
     print()
-    print_info("You can edit these files directly or use 'hermes config edit'")
+    print_info("You can edit these files directly or use 'ultron config edit'")
 
     if migration_ran:
         print()
@@ -2937,7 +2937,7 @@ def run_setup_wizard(args):
 
     # Section 3: Agent Settings — no longer prompted. First installs get the
     # recommended defaults silently; existing installs keep whatever they have.
-    # Tune later with `hermes setup agent`.
+    # Tune later with `ultron setup agent`.
     if not is_existing:
         _apply_default_agent_settings(config)
 
@@ -2969,8 +2969,8 @@ def _run_first_time_quick_setup(config: dict, hermes_home, is_existing: bool):
     Routes straight to the Nous Portal provider — runs the device-code OAuth
     login, picks a Nous model, then configures the terminal backend and (optionally)
     a messaging platform. Applies sensible defaults for everything else (agent
-    settings, tools); the user can customize later via ``hermes setup <section>``
-    or switch providers with ``hermes model``.
+    settings, tools); the user can customize later via ``ultron setup <section>``
+    or switch providers with ``ultron model``.
     """
     from hermes_cli.config import load_config
 
@@ -2993,7 +2993,7 @@ def _run_first_time_quick_setup(config: dict, hermes_home, is_existing: bool):
     except Exception as exc:
         logger.debug("_model_flow_nous error during quick setup: %s", exc)
         print_warning(f"Nous Portal setup encountered an error: {exc}")
-        print_info("You can try again later with: hermes model")
+        print_info("You can try again later with: ultron model")
 
     # Re-sync the wizard's config dict from disk — _model_flow_nous (and the
     # underlying login/model save) write via their own load/save cycle, and the
@@ -3016,7 +3016,7 @@ def _run_first_time_quick_setup(config: dict, hermes_home, is_existing: bool):
         "Connect a messaging platform? (Telegram, Discord, etc.)",
         [
             "Set up messaging now (recommended)",
-            "Skip — set up later with 'hermes setup gateway'",
+            "Skip — set up later with 'ultron setup gateway'",
         ],
         0,
     )
@@ -3034,9 +3034,9 @@ def _run_first_time_quick_setup(config: dict, hermes_home, is_existing: bool):
     print()
     print_success("Setup complete! You're ready to go.")
     print()
-    print_info("  Configure all settings:    hermes setup")
+    print_info("  Configure all settings:    ultron setup")
     if gateway_choice != 0:
-        print_info("  Connect Telegram/Discord:  hermes setup gateway")
+        print_info("  Connect Telegram/Discord:  ultron setup gateway")
     print()
 
     _print_setup_summary(config, hermes_home)
@@ -3055,7 +3055,7 @@ def _blank_slate_minimal_toolsets(config: dict):
        non-configurable platform-toolset recovery that would otherwise re-add
        toolsets like ``kanban``). We list every known toolset except the two we
        keep, guaranteeing a true blank slate regardless of platform/recovery
-       quirks. The user re-enables any of them later via ``hermes tools`` (which
+       quirks. The user re-enables any of them later via ``ultron tools`` (which
        rewrites ``platform_toolsets``) or by editing ``agent.disabled_toolsets``.
     """
     keep = {"file", "terminal"}
@@ -3093,8 +3093,8 @@ def _blank_slate_minimal_toolsets(config: dict):
 def _blank_slate_minimize_config(config: dict):
     """Turn OFF the optional config features for a Blank Slate install.
 
-    Everything here is opt-in afterwards via ``hermes setup agent`` /
-    ``hermes config set``. We keep only what's needed to run.
+    Everything here is opt-in afterwards via ``ultron setup agent`` /
+    ``ultron config set``. We keep only what's needed to run.
     """
     config.setdefault("agent", {})["max_turns"] = 90
 
@@ -3173,7 +3173,7 @@ def _run_blank_slate_setup(config: dict, hermes_home, is_existing: bool):
     if path == 0:
         save_config(config)
         # Blank Slate means no bundled skills; record the opt-out so future
-        # `hermes update` runs don't re-inject them.
+        # `ultron update` runs don't re-inject them.
         try:
             from tools.skills_sync import set_bundled_skills_opt_out
             set_bundled_skills_opt_out(True)
@@ -3182,11 +3182,11 @@ def _run_blank_slate_setup(config: dict, hermes_home, is_existing: bool):
         print()
         print_success("Blank Slate setup complete — minimal agent ready.")
         print_info("Enable anything later, on demand:")
-        print_info("  Enable tools:        hermes tools")
+        print_info("  Enable tools:        ultron tools")
         print_info("  Seed skills:         hermes skills opt-in --sync")
         print_info("  Add MCP servers:     hermes mcp add")
         print_info("  Enable plugins:      hermes plugins")
-        print_info("  Tune agent settings: hermes setup agent")
+        print_info("  Tune agent settings: ultron setup agent")
         print()
         _print_setup_summary(config, hermes_home)
         return
@@ -3218,7 +3218,7 @@ def _blank_slate_walkthrough(config: dict, hermes_home):
         else:
             set_bundled_skills_opt_out(True)
             print_info("No skills seeded. A .no-bundled-skills marker keeps future")
-            print_info("`hermes update` runs from re-injecting them. Opt back in any")
+            print_info("`ultron update` runs from re-injecting them. Opt back in any")
             print_info("time with `hermes skills opt-in --sync`.")
     except Exception as exc:
         logger.debug("blank-slate skill handling error: %s", exc)
@@ -3242,7 +3242,7 @@ def _blank_slate_walkthrough(config: dict, hermes_home):
             logger.debug("blank-slate tools_command error: %s", exc)
             print_warning(f"Tool selector encountered an error: {exc}")
     else:
-        print_info("Keeping the minimal toolset. Add tools later with `hermes tools`.")
+        print_info("Keeping the minimal toolset. Add tools later with `ultron tools`.")
 
     # ── Built-in plugins (off unless chosen) ──
     print()
@@ -3269,10 +3269,10 @@ def _blank_slate_walkthrough(config: dict, hermes_home):
 
     print()
     print_success("Blank Slate setup complete — minimal agent ready.")
-    print_info("  Enable more tools:   hermes tools")
+    print_info("  Enable more tools:   ultron tools")
     print_info("  Seed skills:         hermes skills opt-in --sync")
     print_info("  Add MCP servers:     hermes mcp add")
-    print_info("  Tune agent settings: hermes setup agent")
+    print_info("  Tune agent settings: ultron setup agent")
     print()
 
     _print_setup_summary(config, hermes_home)
@@ -3309,7 +3309,7 @@ def _run_quick_setup(config: dict, hermes_home):
     if not has_anything_missing:
         print_success("Everything is configured! Nothing to do.")
         print()
-        print_info("Run 'hermes setup' and choose 'Full Setup' to reconfigure,")
+        print_info("Run 'ultron setup' and choose 'Full Setup' to reconfigure,")
         print_info("or pick a specific section from the menu.")
         return
 
@@ -3372,7 +3372,7 @@ def _run_quick_setup(config: dict, hermes_home):
         print()
         print_header("Messaging Platforms")
         print_info("Connect Hermes to messaging apps to chat from anywhere.")
-        print_info("You can configure these later with 'hermes setup gateway'.")
+        print_info("You can configure these later with 'ultron setup gateway'.")
 
         # Group by platform (preserving order)
         platform_order = []

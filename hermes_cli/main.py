@@ -1,46 +1,46 @@
 #!/usr/bin/env python3
 """
-Hermes CLI - Main entry point.
+Ultron CLI - Main entry point.
 
 Usage:
-    hermes                     # Interactive chat (default)
-    hermes chat                # Interactive chat
-    hermes gateway             # Run gateway in foreground
-    hermes gateway start       # Start gateway as service
-    hermes gateway stop        # Stop gateway service
-    hermes gateway status      # Show gateway status
-    hermes gateway install     # Install gateway service
-    hermes gateway uninstall   # Uninstall gateway service
-    hermes setup               # Interactive setup wizard
-    hermes logout              # Clear stored authentication
-    hermes status              # Show status of all components
-    hermes cron                # Manage cron jobs
-    hermes cron list           # List cron jobs
-    hermes cron status         # Check if cron scheduler is running
-    hermes doctor              # Check configuration and dependencies
-    hermes honcho setup                    # Configure Honcho AI memory integration
-    hermes honcho status                   # Show Honcho config and connection status
-    hermes honcho sessions                 # List directory → session name mappings
-    hermes honcho map <name>               # Map current directory to a session name
-    hermes honcho peer                     # Show peer names and dialectic settings
-    hermes honcho peer --user NAME         # Set user peer name
-    hermes honcho peer --ai NAME           # Set AI peer name
-    hermes honcho peer --reasoning LEVEL   # Set dialectic reasoning level
-    hermes honcho mode                     # Show current memory mode
-    hermes honcho mode [hybrid|honcho|local]  # Set memory mode
-    hermes honcho tokens                   # Show token budget settings
-    hermes honcho tokens --context N       # Set session.context() token cap
-    hermes honcho tokens --dialectic N     # Set dialectic result char cap
-    hermes honcho identity                 # Show AI peer identity representation
-    hermes honcho identity <file>          # Seed AI peer identity from a file (SOUL.md etc.)
-    hermes honcho migrate                  # Step-by-step migration guide: OpenClaw native → Hermes + Honcho
-    hermes --version           Show version and update status
-    hermes update              Update to latest version
-    hermes uninstall           Uninstall Hermes Agent
-    hermes acp                 Run as an ACP server for editor integration
-    hermes sessions browse     Interactive session picker with search
+    ultron                     # Interactive chat (default)
+    ultron chat                # Interactive chat
+    ultron gateway             # Run gateway in foreground
+    ultron gateway start       # Start gateway as service
+    ultron gateway stop        # Stop gateway service
+    ultron gateway status      # Show gateway status
+    ultron gateway install     # Install gateway service
+    ultron gateway uninstall   # Uninstall gateway service
+    ultron setup               # Interactive setup wizard
+    ultron logout              # Clear stored authentication
+    ultron status              # Show status of all components
+    ultron cron                # Manage cron jobs
+    ultron cron list           # List cron jobs
+    ultron cron status         # Check if cron scheduler is running
+    ultron doctor              # Check configuration and dependencies
+    ultron honcho setup                    # Configure Honcho AI memory integration
+    ultron honcho status                   # Show Honcho config and connection status
+    ultron honcho sessions                 # List directory → session name mappings
+    ultron honcho map <name>               # Map current directory to a session name
+    ultron honcho peer                     # Show peer names and dialectic settings
+    ultron honcho peer --user NAME         # Set user peer name
+    ultron honcho peer --ai NAME           # Set AI peer name
+    ultron honcho peer --reasoning LEVEL   # Set dialectic reasoning level
+    ultron honcho mode                     # Show current memory mode
+    ultron honcho mode [hybrid|honcho|local]  # Set memory mode
+    ultron honcho tokens                   # Show token budget settings
+    ultron honcho tokens --context N       # Set session.context() token cap
+    ultron honcho tokens --dialectic N     # Set dialectic result char cap
+    ultron honcho identity                 # Show AI peer identity representation
+    ultron honcho identity <file>          # Seed AI peer identity from a file (SOUL.md etc.)
+    ultron honcho migrate                  # Step-by-step migration guide: OpenClaw native → Ultron + Honcho
+    ultron --version           Show version and update status
+    ultron update              Update to latest version
+    ultron uninstall           Uninstall Ultron Agent
+    ultron acp                 Run as an ACP server for editor integration
+    ultron sessions browse     Interactive session picker with search
 
-    hermes claw migrate --dry-run  # Preview migration without changes
+    ultron claw migrate --dry-run  # Preview migration without changes
 """
 
 # IMPORTANT: hermes_bootstrap must be the very first import — it sets up

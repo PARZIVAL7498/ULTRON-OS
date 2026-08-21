@@ -39,48 +39,48 @@ def _inherited_flag(parser, *args, **kwargs):
 
 _EPILOGUE = """
 Examples:
-    hermes                        Start interactive chat
-    hermes chat -q "Hello"        Single query mode
-    hermes --tui                  Launch the modern TUI (or set display.interface: tui)
-    hermes --cli                  Force the classic REPL (overrides display.interface: tui)
-    hermes -c                     Resume the most recent session
-    hermes -c "my project"        Resume a session by name (latest in lineage)
-    hermes --resume <session_id>  Resume a specific session by ID
-    hermes --resume latest        Resume the most recent session (same as -c)
-    hermes --tui --resume latest --in ./dir   Resume ./dir's latest session in the TUI
-    hermes setup                  Run setup wizard
-    hermes logout                 Clear stored authentication
-    hermes auth add <provider>    Add a pooled credential
-    hermes auth list              List pooled credentials
-    hermes auth remove <p> <t>    Remove pooled credential by index, id, or label
-    hermes auth reset <provider>  Clear exhaustion status for a provider
-    hermes model                  Select default model
-    hermes fallback [list]        Show fallback provider chain
-    hermes fallback add           Add a fallback provider (same picker as `hermes model`)
-    hermes fallback remove        Remove a fallback provider from the chain
-    hermes config                 View configuration
-    hermes config edit            Edit config in $EDITOR
-    hermes config set model gpt-4 Set a config value
-    hermes gateway                Run messaging gateway
-    hermes -s hermes-agent-dev,github-auth
-    hermes -w                     Start in isolated git worktree
-    hermes gateway install        Install gateway background service
-    hermes sessions list          List past sessions
-    hermes sessions browse        Interactive session picker
-    hermes sessions rename ID T   Rename/title a session
-    hermes logs                   View agent.log (last 50 lines)
-    hermes logs -f                Follow agent.log in real time
-    hermes logs errors            View errors.log
-    hermes logs --since 1h        Lines from the last hour
-    hermes debug share             Upload debug report for support
-    hermes console                Open the safe Hermes command console
-    hermes update                 Update to latest version
-    hermes dashboard              Start web UI dashboard (port 9119)
-    hermes dashboard --stop       Stop running dashboard processes
-    hermes dashboard --status     List running dashboard processes
+    ultron                        Start interactive chat
+    ultron chat -q "Hello"        Single query mode
+    ultron --tui                  Launch the modern TUI (or set display.interface: tui)
+    ultron --cli                  Force the classic REPL (overrides display.interface: tui)
+    ultron -c                     Resume the most recent session
+    ultron -c "my project"        Resume a session by name (latest in lineage)
+    ultron --resume <session_id>  Resume a specific session by ID
+    ultron --resume latest        Resume the most recent session (same as -c)
+    ultron --tui --resume latest --in ./dir   Resume ./dir's latest session in the TUI
+    ultron setup                  Run setup wizard
+    ultron logout                 Clear stored authentication
+    ultron auth add <provider>    Add a pooled credential
+    ultron auth list              List pooled credentials
+    ultron auth remove <p> <t>    Remove pooled credential by index, id, or label
+    ultron auth reset <provider>  Clear exhaustion status for a provider
+    ultron model                  Select default model
+    ultron fallback [list]        Show fallback provider chain
+    ultron fallback add           Add a fallback provider (same picker as `ultron model`)
+    ultron fallback remove        Remove a fallback provider from the chain
+    ultron config                 View configuration
+    ultron config edit            Edit config in $EDITOR
+    ultron config set model gpt-4 Set a config value
+    ultron gateway                Run messaging gateway
+    ultron -s hermes-agent-dev,github-auth
+    ultron -w                     Start in isolated git worktree
+    ultron gateway install        Install gateway background service
+    ultron sessions list          List past sessions
+    ultron sessions browse        Interactive session picker
+    ultron sessions rename ID T   Rename/title a session
+    ultron logs                   View agent.log (last 50 lines)
+    ultron logs -f                Follow agent.log in real time
+    ultron logs errors            View errors.log
+    ultron logs --since 1h        Lines from the last hour
+    ultron debug share            Upload debug report for support
+    ultron console                Open the safe Ultron command console
+    ultron update                 Update to latest version
+    ultron dashboard              Start web UI dashboard (port 9119)
+    ultron dashboard --stop       Stop running dashboard processes
+    ultron dashboard --status     List running dashboard processes
 
 For more help on a command:
-    hermes <command> --help
+    ultron <command> --help
 """
 
 
@@ -92,8 +92,8 @@ def build_top_level_parser():
     other subparsers via ``subparsers.add_parser(...)``.
     """
     parser = argparse.ArgumentParser(
-        prog="hermes",
-        description="Hermes Agent - AI assistant with tool-calling capabilities",
+        prog="ultron",
+        description="Ultron Agent - AI assistant with tool-calling capabilities",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=_EPILOGUE,
     )

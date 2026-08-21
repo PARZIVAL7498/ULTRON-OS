@@ -216,7 +216,7 @@ _FFFC_WAIT_SECONDS = 15.0  # Timeout for waiting on an attachment after a U+FFFC
 # Resolution is deliberately NOT done at import time: resolve_sidecar_dir()
 # probes the filesystem (touch/unlink) and may mirror files to the data
 # volume — side effects that must not fire just because something imported
-# this module (hermes status, test collection, plugin discovery).
+# this module (ultron status, test collection, plugin discovery).
 from .sidecar_paths import dir_writable as _dir_writable, resolve_sidecar_dir
 
 # Tests monkeypatch these module globals directly; the accessors below
@@ -443,12 +443,12 @@ def check_requirements() -> bool:
         # cold-installs from the committed lockfile (on hosted images the
         # user has no CLI to run `hermes photon setup`, so the connect path
         # must self-heal). Otherwise keep returning False so
-        # `hermes setup` / status surface the missing-deps state.
+        # `ultron setup` / status surface the missing-deps state.
         if bool(shutil.which("npm")) and _dir_writable(_sidecar_dir()):
             return True
         # DEBUG (not WARNING): this is the normal pre-setup state.
         # check_fn() is called from multiple hot paths in the core
-        # (load_gateway_config, hermes status, GET /api/status polling) —
+        # (load_gateway_config, ultron status, GET /api/status polling) —
         # WARNING here would spam logs on every probe for unconfigured photon.
         npm_error = ""
         try:
@@ -475,7 +475,7 @@ def check_requirements() -> bool:
 def _sidecar_deps_stale() -> bool:
     """True when node_modules exists but is older than the committed lockfile.
 
-    `hermes update` rewrites ``package-lock.json`` when the spectrum-ts pin is
+    `ultron update` rewrites ``package-lock.json`` when the spectrum-ts pin is
     bumped, but does not reinstall ``node_modules``. npm records the state of
     the last install in ``node_modules/.package-lock.json``; when the top-level
     lockfile is newer than that marker, the install is out of date. This is the
@@ -1614,7 +1614,7 @@ class PhotonAdapter(BasePlatformAdapter):
                     code="SIDECAR_DEPS_MISSING",
                     retryable=False,
                 )
-        # A `hermes update` that bumps the spectrum-ts pin rewrites
+        # A `ultron update` that bumps the spectrum-ts pin rewrites
         # package-lock.json but never reinstalls node_modules, so the sidecar
         # spawns against stale deps and dies on every reconnect (the v8 patch
         # script can't find @spectrum-ts/imessage/dist that only v8 ships).
@@ -2919,7 +2919,7 @@ def register(ctx) -> None:
             "Spectrum project, links your phone number, installs the "
             "spectrum-ts sidecar)."
         ),
-        # Surfaces Photon in `hermes gateway setup` alongside every other
+        # Surfaces Photon in `ultron gateway setup` alongside every other
         # channel — same unified onboarding wizard, no Photon-only detour.
         setup_fn=_cli.gateway_setup,
         env_enablement_fn=_env_enablement,

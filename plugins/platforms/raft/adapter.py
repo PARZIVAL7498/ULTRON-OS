@@ -783,7 +783,7 @@ def _env_enablement() -> Optional[dict]:
 
 
 def interactive_setup() -> None:
-    """Interactive ``hermes gateway setup`` flow for the Raft platform.
+    """Interactive ``ultron gateway setup`` flow for the Raft platform.
 
     Lazy-imports CLI helpers so the plugin stays importable in gateway runtime
     and test contexts. The flow persists ``RAFT_PROFILE`` to the Hermes env
@@ -821,7 +821,7 @@ def interactive_setup() -> None:
 
     print()
     print_success("Raft configuration saved")
-    print_info("Restart the gateway for changes to take effect: hermes gateway restart")
+    print_info("Restart the gateway for changes to take effect: ultron gateway restart")
 
 
 def register(ctx) -> None:

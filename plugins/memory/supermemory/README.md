@@ -17,7 +17,7 @@ hermes memory setup    # select "supermemory"
 Or manually:
 
 ```bash
-hermes config set memory.provider supermemory
+ultron config set memory.provider supermemory
 echo 'SUPERMEMORY_API_KEY=***' >> ~/.hermes/.env
 ```
 

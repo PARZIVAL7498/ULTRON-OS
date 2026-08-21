@@ -143,7 +143,7 @@ export const en: Translations = {
     stopped: "Stopped",
     updateHermes: "Update Hermes",
     updateHermesConfirmMessage:
-      "This runs hermes update and restarts the gateway when it finishes. Active sessions keep their prompt cache until then.",
+      "This runs ultron update and restarts the gateway when it finishes. Active sessions keep their prompt cache until then.",
     updateHermesConfirmNow: "Update now",
     updateHermesConfirmTitle: "Update Hermes?",
     updatingHermes: "Updating Hermes…",

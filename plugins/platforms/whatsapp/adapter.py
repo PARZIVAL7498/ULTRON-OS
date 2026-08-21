@@ -516,7 +516,7 @@ class WhatsAppAdapter(WhatsAppBehaviorMixin, BasePlatformAdapter):
             logger.warning("[%s] Node.js not found. WhatsApp requires Node.js.", self.name)
             self._set_fatal_error(
                 "whatsapp_node_missing",
-                "Node.js is not installed — install Node.js and re-run `hermes gateway`.",
+                "Node.js is not installed — install Node.js and re-run `ultron gateway`.",
                 retryable=False,
             )
             return False
@@ -567,7 +567,7 @@ class WhatsAppAdapter(WhatsAppBehaviorMixin, BasePlatformAdapter):
         try:
             # Auto-install npm dependencies when node_modules is missing OR
             # package.json changed since the last install (e.g. after
-            # `hermes update` bumps the Baileys pin).  The stamp file records
+            # `ultron update` bumps the Baileys pin).  The stamp file records
             # the package.json hash of the last successful install.
             bridge_dir = bridge_path.parent
             _pkg_json = bridge_dir / "package.json"
@@ -602,7 +602,7 @@ class WhatsAppAdapter(WhatsAppBehaviorMixin, BasePlatformAdapter):
                         print(f"[{self.name}] npm install failed: {install_result.stderr}")
                         self._set_fatal_error(
                             "whatsapp_npm_install_failed",
-                            f"WhatsApp bridge npm install failed. Run `cd {bridge_dir} && {_npm_bin} install` manually, then restart `hermes gateway`.",
+                            f"WhatsApp bridge npm install failed. Run `cd {bridge_dir} && {_npm_bin} install` manually, then restart `ultron gateway`.",
                             retryable=False,
                         )
                         return False
@@ -616,7 +616,7 @@ class WhatsAppAdapter(WhatsAppBehaviorMixin, BasePlatformAdapter):
                     print(f"[{self.name}] Failed to install dependencies: {e}")
                     self._set_fatal_error(
                         "whatsapp_npm_install_failed",
-                        f"WhatsApp bridge npm install failed ({e}). Run `cd {bridge_dir} && {_npm_bin} install` manually, then restart `hermes gateway`.",
+                        f"WhatsApp bridge npm install failed ({e}). Run `cd {bridge_dir} && {_npm_bin} install` manually, then restart `ultron gateway`.",
                         retryable=False,
                     )
                     return False
@@ -640,7 +640,7 @@ class WhatsAppAdapter(WhatsAppBehaviorMixin, BasePlatformAdapter):
                                 # bridge if it is serving the same bridge.js
                                 # that is on disk right now.  A long-lived
                                 # bridge survives gateway restarts AND
-                                # `hermes update`, so without this check it
+                                # `ultron update`, so without this check it
                                 # keeps serving pre-update code forever
                                 # (e.g. no inbound media download).  Old
                                 # bridges that don't report scriptHash are
@@ -1885,7 +1885,7 @@ def _is_connected(config) -> bool:
     bridge token here — so the opt-in flag is the connection signal. The legacy
     built-in path keyed off ``WHATSAPP_ENABLED`` in both the connected-platforms
     check and the setup-status display; returning an unconditional True here
-    would make WhatsApp always show as "configured" in ``hermes setup`` even
+    would make WhatsApp always show as "configured" in ``ultron setup`` even
     when the user never enabled it. #41112.
     """
     extra = getattr(config, "extra", {}) or {}

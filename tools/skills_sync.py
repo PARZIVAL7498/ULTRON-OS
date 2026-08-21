@@ -95,10 +95,10 @@ def _manifest_file() -> Path:
         return configured
     return _skills_dir() / ".bundled_manifest"
 
-# Marker file written by `hermes profile create --no-skills` (named profiles)
-# and by the installer's `--no-skills` flag (the default ~/.hermes profile).
+# Marker file written by `ultron profile create --no-skills` (named profiles)
+# and by the installer's `--no-skills` flag (the default ~/.ultron profile).
 # When present in HERMES_HOME, sync_skills() is a no-op so neither the
-# installer, `hermes update`, nor a direct sync re-injects bundled skills.
+# installer, `ultron update`, nor a direct sync re-injects bundled skills.
 # Delete the file to opt back in. Mirrors
 # hermes_cli.profiles.NO_BUNDLED_SKILLS_MARKER (kept as a literal here to
 # avoid importing the CLI layer into this low-level sync module).
@@ -753,7 +753,7 @@ def sync_skills(quiet: bool = False) -> dict:
         # Curator-pruned built-ins: do not re-seed. The suppression list
         # (~/.hermes/skills/.curator_suppressed) is written when the curator
         # archives a bundled skill with curator.prune_builtins enabled. Without
-        # this skip, every `hermes update` would resurrect a skill the user
+        # this skip, every `ultron update` would resurrect a skill the user
         # deliberately pruned. Restoring the skill clears its suppression entry.
         if skill_name in suppressed:
             suppressed_skipped.append(skill_name)
@@ -1116,7 +1116,7 @@ def reset_bundled_skill(name: str, restore: bool = False) -> dict:
     else:
         action = "manifest_cleared"
         message = (
-            f"Cleared manifest entry for '{name}'. Future `hermes update` runs "
+            f"Cleared manifest entry for '{name}'. Future `ultron update` runs "
             f"will re-baseline against your current copy and accept upstream changes."
         )
 
@@ -1124,7 +1124,7 @@ def reset_bundled_skill(name: str, restore: bool = False) -> dict:
 
 
 def _is_tracked_user_modification(origin_hash: str, user_hash: str) -> bool:
-    """Whether an on-disk skill counts as a user modification ``hermes update`` keeps.
+    """Whether an on-disk skill counts as a user modification ``ultron update`` keeps.
 
     Shared by the sync loop (which decides what to skip) and
     ``list_user_modified_bundled_skills`` (which surfaces the names) so the two
@@ -1136,7 +1136,7 @@ def _is_tracked_user_modification(origin_hash: str, user_hash: str) -> bool:
 
 
 def list_user_modified_bundled_skills() -> List[dict]:
-    """Return the bundled skills that ``hermes update`` keeps because the user
+    """Return the bundled skills that ``ultron update`` keeps because the user
     edited them locally.
 
     A skill counts as user-modified when its on-disk copy no longer matches the
@@ -1294,7 +1294,7 @@ def set_bundled_skills_opt_out(enabled: bool) -> dict:
     """Toggle the .no-bundled-skills opt-out marker for the active profile.
 
     When ``enabled`` is True, writes HERMES_HOME/.no-bundled-skills so the
-    installer, ``hermes update``, and any direct sync stop seeding bundled
+    installer, ``ultron update``, and any direct sync stop seeding bundled
     skills. When False, removes the marker so seeding resumes on the next
     sync. This is the on-disk-state half of ``hermes skills opt-out`` /
     ``opt-in``; removal of already-present skills is a separate, explicit
@@ -1312,7 +1312,7 @@ def set_bundled_skills_opt_out(enabled: bool) -> dict:
             marker.write_text(
                 "This profile opted out of bundled-skill seeding "
                 "(`hermes skills opt-out`).\n"
-                "Delete this file to re-enable sync on the next `hermes update`.\n",
+                "Delete this file to re-enable sync on the next `ultron update`.\n",
                 encoding="utf-8",
             )
             changed = not existed
@@ -1327,7 +1327,7 @@ def set_bundled_skills_opt_out(enabled: bool) -> dict:
                 marker.unlink()
             changed = existed
             message = (
-                "Opted back in. The next `hermes update` (or `hermes skills "
+                "Opted back in. The next `ultron update` (or `hermes skills "
                 "opt-in --sync`) will re-seed bundled skills."
                 if changed
                 else "Not opted out — no marker to remove."

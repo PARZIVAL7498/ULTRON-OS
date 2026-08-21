@@ -268,7 +268,7 @@ def _is_cron_approval_context() -> bool:
 def _is_single_query_approval_context() -> bool:
     """True when the current approval decision is from a single-query (-q) session.
 
-    ``hermes chat -q "..."`` runs one turn and exits with no user waiting to
+    ``ultron chat -q "..."`` runs one turn and exits with no user waiting to
     answer approval prompts, but it still exports ``HERMES_INTERACTIVE=1`` so
     interactive sudo password prompts can be driven from stdin. Without an
     explicit marker, ``_is_interactive_cli()`` would report True and the gate
@@ -918,12 +918,12 @@ DANGEROUS_PATTERNS = [
     # terminates all running agents mid-work.  Allow global flags between
     # `hermes` and `gateway` (e.g. `hermes -p ade gateway restart`) so a
     # profile flag can't slip the agent past the guard.
-    (r'\bhermes\s+(?:-{1,2}\S+(?:\s+\S+)?\s+)*gateway\s+(stop|restart)\b', "stop/restart hermes gateway (kills running agents)"),
-    (r'\bhermes\s+update\b', "hermes update (restarts gateway, kills running agents)"),
+    (r'\bhermes\s+(?:-{1,2}\S+(?:\s+\S+)?\s+)*gateway\s+(stop|restart)\b', "stop/restart ultron gateway (kills running agents)"),
+    (r'\bhermes\s+update\b', "ultron update (restarts gateway, kills running agents)"),
     # Docker container lifecycle — any user with docker.sock mounted (a common
     # Docker Compose pattern) gives the agent the ability to restart/stop/kill
     # containers without approval.  These are agent-initiated lifecycle operations
-    # that should always require user consent, just like `hermes gateway restart`
+    # that should always require user consent, just like `ultron gateway restart`
     # already does for the gateway process.
     # Docker/Podman daemon redirect — global flags or env prefixes that point
     # the CLI at a DIFFERENT daemon, often a remote host over ssh/tcp.  A
@@ -973,7 +973,7 @@ DANGEROUS_PATTERNS = [
     (r'\bkill\b.*\$\(\s*(pgrep|pidof)\b', "kill process via pgrep/pidof expansion (self-termination)"),
     (r'\bkill\b.*`\s*(pgrep|pidof)\b', "kill process via backtick pgrep/pidof expansion (self-termination)"),
     # launchctl-driven gateway stop/restart on macOS. The agent can bypass
-    # the `hermes gateway stop|restart` pattern above by driving launchd
+    # the `ultron gateway stop|restart` pattern above by driving launchd
     # directly against the service label (commonly `ai.hermes.gateway`).
     # Catch the operations that stop, restart, or unload it.
     (r'\blaunchctl\s+(stop|kickstart|bootout|unload|kill|disable|remove)\b.*\b(hermes|ai\.hermes)\b', "stop/restart hermes launchd service (kills running agents)"),

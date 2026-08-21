@@ -94,10 +94,10 @@ All fields are optional. Missing values inherit from the ``default`` skin.
 
     # Branding: text strings used throughout the CLI
     branding:
-      agent_name: "Jimmy"          # Banner title, status display
+      agent_name: "Ultron"          # Banner title, status display
       welcome: "Welcome message"          # Shown at CLI startup
       goodbye: "Goodbye! ⚕"              # Shown on exit
-      response_label: " Jimmy "       # Response box header label
+      response_label: " Ultron "       # Response box header label
       prompt_symbol: "❯"                 # Input prompt symbol (bare token; renderers add trailing space)
       help_header: "(^_^)? Commands"      # /help header text
 
@@ -118,8 +118,8 @@ USAGE
     from hermes_cli.skin_engine import get_active_skin, list_skins, set_active_skin
 
     skin = get_active_skin()
-    print(skin.colors["banner_title"])    # "#FFD700"
-    print(skin.get_branding("agent_name"))  # "Jimmy"
+    print(skin.colors["banner_title"])    # "#FF2A2A"
+    print(skin.get_branding("agent_name"))  # "Ultron"
 
     set_active_skin("ares")               # Switch to built-in ares skin
     set_active_skin("mytheme")            # Switch to user skin from ~/.hermes/skins/
@@ -201,72 +201,65 @@ class SkinConfig:
 _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
     "default": {
         "name": "default",
-        "description": "Classic Hermes — gold and kawaii",
-        # Dark-authored. Values match the TUI's DARK_THEME so the classic CLI
-        # and the TUI render the same Hermes gold.
+        "description": "Ultron — crimson and red",
+        # Dark-authored. Values match the TUI's DARK_THEME in red palette.
         "colors": {
-            "banner_border": "#CD7F32",
-            "banner_title": "#FFD700",
-            "banner_accent": "#FFBF00",
-            "banner_dim": "#B8860B",
-            "banner_text": "#FFF8DC",
-            "ui_accent": "#FFBF00",
-            "ui_label": "#DAA520",
+            "banner_border": "#CC0000",
+            "banner_title": "#FF2A2A",
+            "banner_accent": "#FF4444",
+            "banner_dim": "#8B0000",
+            "banner_text": "#FFF0F0",
+            "ui_accent": "#FF4444",
+            "ui_label": "#FF2A2A",
             "ui_ok": "#4caf50",
             "ui_error": "#ef5350",
             "ui_warn": "#ffa726",
-            "prompt": "#FFF8DC",
-            "input_rule": "#CD7F32",
-            "response_border": "#FFD700",
-            "status_bar_bg": "#1a1a2e",
+            "prompt": "#FFF0F0",
+            "input_rule": "#CC0000",
+            "response_border": "#FF2A2A",
+            "status_bar_bg": "#1a1010",
             "status_bar_text": "#C0C0C0",
-            "status_bar_strong": "#FFD700",
-            "status_bar_dim": "#8A7A4A",
+            "status_bar_strong": "#FF2A2A",
+            "status_bar_dim": "#8A4A4A",
             "status_bar_good": "#8FBC8F",
-            "status_bar_warn": "#FFD700",
-            "status_bar_bad": "#FF8C00",
+            "status_bar_warn": "#FF8C00",
+            "status_bar_bad": "#FF0000",
             "status_bar_critical": "#FF6B6B",
-            "session_label": "#DAA520",
-            "session_border": "#8B8682",
-            "completion_menu_bg": "#1a1a2e",
-            "completion_menu_current_bg": "#333355",
-            "selection_bg": "#3a3a55",
-            "shell_dollar": "#4dabf7",
-            "voice_status_bg": "#1a1a2e",
+            "session_label": "#FF4444",
+            "session_border": "#8B4040",
+            "completion_menu_bg": "#1a1010",
+            "completion_menu_current_bg": "#441a1a",
+            "selection_bg": "#552020",
+            "shell_dollar": "#FF4444",
+            "voice_status_bg": "#1a1010",
         },
         # Light overlay (merged onto `colors`; dark mode renders the vivid
-        # block above untouched). The goldenrod ladder: on white, the vivid
-        # #FFD700/#FFBF00 read as glare and WCAG-darkened mustard (#867000)
-        # reads as mud — the sweet spot is the statusbar's goldenrod family
-        # (#B8860B/#DAA520): hue kept, saturation tamed, mid luminance.
-        # Hierarchy on white: ink body 8.9:1 > fade 5.2 > label 3.7 >
-        # muted 3.3 > title 2.7 > headers 2.4 (accents recede last, like
-        # slate's pastels — the raw-canon look, just not neon).
+        # block above untouched).
         "light_colors": {
-            "banner_title": "#C8961E",
-            "banner_accent": "#D89B04",
-            "banner_dim": "#B8860B",
-            "banner_text": "#5C4718",
-            "ui_accent": "#D89B04",
-            "ui_label": "#A97E10",
+            "banner_title": "#B91C1C",
+            "banner_accent": "#DC2626",
+            "banner_dim": "#7F1D1D",
+            "banner_text": "#450A0A",
+            "ui_accent": "#DC2626",
+            "ui_label": "#991B1B",
             "ui_ok": "#2E7D32",
             "ui_error": "#C62828",
             "ui_warn": "#D97706",
-            "prompt": "#5C4718",
-            "response_border": "#C8961E",
-            "session_label": "#A97E10",
+            "prompt": "#450A0A",
+            "response_border": "#B91C1C",
+            "session_label": "#991B1B",
             "status_bar_text": "#6F6F6F",
-            "status_bar_strong": "#C8961E",
-            "status_bar_dim": "#9A8A5A",
+            "status_bar_strong": "#B91C1C",
+            "status_bar_dim": "#9A5A5A",
             "status_bar_good": "#2E7D32",
-            "status_bar_warn": "#C8961E",
+            "status_bar_warn": "#B91C1C",
             "status_bar_bad": "#C2410C",
             "status_bar_critical": "#B91C1C",
-            "shell_dollar": "#1E6FC0",
-            # Fills: flip the dark navy surfaces to light polarity.
+            "shell_dollar": "#DC2626",
+            # Fills: flip the dark surfaces to light polarity.
             "completion_menu_bg": "#F5F5F5",
-            "completion_menu_current_bg": "#E0D1BF",
-            "selection_bg": "#D4E4F7",
+            "completion_menu_current_bg": "#FDE8E8",
+            "selection_bg": "#FCD5D5",
             "status_bar_bg": "#F5F5F5",
             "voice_status_bg": "#F5F5F5",
         },
@@ -274,10 +267,10 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
             # Empty = use hardcoded defaults in display.py
         },
         "branding": {
-            "agent_name": "Jimmy",
-            "welcome": "Welcome to Jimmy! Type your message or /help for commands.",
+            "agent_name": "Ultron",
+            "welcome": "Welcome to Ultron! Type your message or /help for commands.",
             "goodbye": "Goodbye! ⚕",
-            "response_label": " Jimmy ",
+            "response_label": " Ultron ",
             "prompt_symbol": "❯",
             "help_header": "(^_^)? Available Commands",
         },
@@ -395,10 +388,10 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
         },
         "spinner": {},
         "branding": {
-            "agent_name": "Jimmy",
-            "welcome": "Welcome to Jimmy! Type your message or /help for commands.",
+            "agent_name": "Ultron",
+            "welcome": "Welcome to Ultron! Type your message or /help for commands.",
             "goodbye": "Goodbye! ⚕",
-            "response_label": " Jimmy ",
+            "response_label": " Ultron ",
             "prompt_symbol": "❯",
             "help_header": "[?] Available Commands",
         },
@@ -439,10 +432,10 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
         },
         "spinner": {},
         "branding": {
-            "agent_name": "Jimmy",
-            "welcome": "Welcome to Jimmy! Type your message or /help for commands.",
+            "agent_name": "Ultron",
+            "welcome": "Welcome to Ultron! Type your message or /help for commands.",
             "goodbye": "Goodbye! ⚕",
-            "response_label": " Jimmy ",
+            "response_label": " Ultron ",
             "prompt_symbol": "❯",
             "help_header": "(^_^)? Available Commands",
         },
@@ -485,10 +478,10 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
         },
         "spinner": {},
         "branding": {
-            "agent_name": "Jimmy",
-            "welcome": "Welcome to Jimmy! Type your message or /help for commands.",
+            "agent_name": "Ultron",
+            "welcome": "Welcome to Ultron! Type your message or /help for commands.",
             "goodbye": "Goodbye! ⚕",
-            "response_label": " Jimmy ",
+            "response_label": " Ultron ",
             "prompt_symbol": "❯",
             "help_header": "[?] Available Commands",
         },
@@ -531,10 +524,10 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
         },
         "spinner": {},
         "branding": {
-            "agent_name": "Jimmy",
-            "welcome": "Welcome to Jimmy! Type your message or /help for commands.",
+            "agent_name": "Ultron",
+            "welcome": "Welcome to Ultron! Type your message or /help for commands.",
             "goodbye": "Goodbye! \u2695",
-            "response_label": "  Jimmy ",
+            "response_label": "  Ultron ",
             "prompt_symbol": "\u276f",
             "help_header": "(^_^)? Available Commands",
         },

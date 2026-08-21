@@ -108,7 +108,7 @@ def resolve_provider_secret(
 ) -> str:
     """Resolve a voice-provider API key. Single owner for STT/TTS key lookup.
 
-    Resolution order (fixes #68003 — keys added via ``hermes auth add
+    Resolution order (fixes #68003 — keys added via ``ultron auth add
     <provider>`` were invisible to the voice tools, which only consulted
     env/.env):
 
@@ -119,7 +119,7 @@ def resolve_provider_secret(
        ``agent.secret_scope.py``). Outside multiplexing it reads
        ``hermes_cli.config.get_env_value`` (os.environ, then ``.env``),
        matching the tools' historical behaviour exactly.
-    3. The credential pool / auth store for ``provider_id`` (``hermes auth
+    3. The credential pool / auth store for ``provider_id`` (``ultron auth
        add <provider_id>``). Skipped under an active multiplex turn, where
        only the profile scope is authoritative for credentials.
 
@@ -169,7 +169,7 @@ def resolve_provider_secret(
     try:
         from agent.credential_pool import load_pool
 
-        # `hermes auth add <provider>` keys a registry provider by its plain
+        # `ultron auth add <provider>` keys a registry provider by its plain
         # id, but a provider declared via config.yaml ``providers.<name>`` /
         # ``custom_providers`` is pooled under ``custom:<name>`` (see
         # agent/credential_pool.py CUSTOM_POOL_PREFIX). Check both.
@@ -210,7 +210,7 @@ def resolve_openai_audio_api_key() -> str:
     ``agent/secret_scope.py``.
 
     Outside a multiplexed turn, ``OPENAI_API_KEY`` additionally falls back to
-    the credential pool (``hermes auth add openai-api``) via
+    the credential pool (``ultron auth add openai-api``) via
     ``resolve_provider_secret`` — same #68003 fix as the other voice
     providers. The dedicated voice-tools override remains env/scope-only.
     """
@@ -235,7 +235,7 @@ def nous_tool_gateway_unavailable_message(
     del force_fresh
     return (
         f"{capability} is unavailable. Nous Subscription / Tool Gateway was "
-        "removed — configure a direct (BYOK) provider instead via `hermes tools`."
+        "removed — configure a direct (BYOK) provider instead via `ultron tools`."
     )
 
 
@@ -255,7 +255,7 @@ _DEFAULT_NAME_KEYS = ("provider", "backend", "cloud_provider")
 
 
 def read_selection(section: str) -> str | None:
-    """Return the stored `hermes tools` provider string for a config section.
+    """Return the stored `ultron tools` provider string for a config section.
 
     THE single runtime read of the persisted selection. Returns:
     - a vendor name (``"fal"``, ``"openai"``, ``"firecrawl"``, ...) — that
@@ -344,7 +344,7 @@ def selection_error(section: str, selection_name: str, failure: str) -> str:
     """The uniform honest-error contract for a selected-but-broken provider."""
     return (
         f"{section} is configured to use {selection_name} (set via hermes "
-        f"tools), but {failure}. Run 'hermes tools' to change it."
+        f"tools), but {failure}. Run 'ultron tools' to change it."
     )
 
 

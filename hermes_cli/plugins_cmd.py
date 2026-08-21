@@ -1076,7 +1076,7 @@ def cmd_install(
         )
 
     console.print("[dim]Restart the gateway for the plugin to take effect:[/dim]")
-    console.print("[dim]  hermes gateway restart[/dim]")
+    console.print("[dim]  ultron gateway restart[/dim]")
     console.print()
 
 
@@ -1285,7 +1285,7 @@ _BASIC_AUTH_PLUGIN_KEYS = frozenset({"basic", "dashboard_auth/basic"})
 def ensure_basic_auth_plugin_enabled_in_config(cfg: dict) -> bool:
     """Re-enable the bundled basic dashboard-auth plugin in *cfg*.
 
-    ``hermes setup`` / ``hermes plugins disable basic`` can park the plugin
+    ``ultron setup`` / ``hermes plugins disable basic`` can park the plugin
     in ``plugins.disabled`` while ``dashboard.basic_auth`` is configured.
     The basic provider is a bundled backend that still respects the
     deny-list, so password auth silently fails until the block is removed.
@@ -2939,7 +2939,7 @@ def _git_pull_plugin_dir(target: Path) -> tuple[bool, str]:
     would be overwritten by merge" — making the plugin permanently
     un-updatable until they hand-run git. Same UX class Factory Droid fixed
     in v0.188 ("Updating a plugin marketplace now succeeds when its checkout
-    has local changes"), and the same autostash approach ``hermes update``
+    has local changes"), and the same autostash approach ``ultron update``
     already uses for the main checkout (PR #70161).
 
     Flow: clean tree → plain pull (unchanged). Dirty tree → stash push

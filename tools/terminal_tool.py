@@ -69,7 +69,7 @@ def _redact_terminal_error_text(value: Any) -> str:
 from tools.interrupt import is_interrupted, _interrupt_event  # noqa: F401 — re-exported
 from tools.registry import tool_error
 from tools.shell_heredoc import strip_inert_heredoc_bodies
-# display_hermes_home imported lazily at call site (stale-module safety during hermes update)
+# display_hermes_home imported lazily at call site (stale-module safety during ultron update)
 
 
 
@@ -1533,7 +1533,7 @@ def _ensure_terminal_env_bridged() -> None:
 
     Explicit terminal config keys win: when config.yaml has a ``terminal``
     section, each key present there overrides its matching env value (which may
-    be stale from ``hermes setup``). Environment values for omitted terminal
+    be stale from ``ultron setup``). Environment values for omitted terminal
     keys are preserved. When no terminal section exists, exported/.env values
     keep working unchanged.
     """
@@ -2827,7 +2827,7 @@ def terminal_tool(
         # restart|stop targeting hermes-gateway) must never run inside the
         # gateway process itself. The restart would SIGTERM the gateway, which
         # kills this very subprocess before it can complete — the service may
-        # never restart. This mirrors the `hermes gateway restart` guard in
+        # never restart. This mirrors the `ultron gateway restart` guard in
         # hermes_cli/gateway.py and the cron-path guard in hermes_cli/cron.py,
         # but applies unconditionally (force=True cannot help here).
         if os.environ.get("_HERMES_GATEWAY") == "1":
@@ -2925,7 +2925,7 @@ def terminal_tool(
                         "Blocked: command or referenced script cannot restart or stop "
                         "the gateway from inside the gateway process. The gateway would "
                         "kill this command before it could complete (SIGTERM propagates "
-                        "to child processes). Run `hermes gateway restart` from a "
+                        "to child processes). Run `ultron gateway restart` from a "
                         "separate shell outside the running gateway."
                     ),
                     "status": "error",

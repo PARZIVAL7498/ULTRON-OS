@@ -30,7 +30,7 @@ def redact_key(key: str) -> str:
     """Redact an API key for display.
 
     Thin wrapper over :func:`agent.redact.mask_secret`. Preserves the
-    "(not set)" placeholder in dim color to match ``hermes config``'s
+    "(not set)" placeholder in dim color to match ``ultron config``'s
     output (previously this variant was missing the DIM color —
     consolidated via PR that also introduced ``mask_secret``).
     """
@@ -107,7 +107,7 @@ from hermes_constants import is_termux as _is_termux
 
 
 def _estop_status_line():
-    """One-line pause banner for `hermes status`, or None when not paused.
+    """One-line pause banner for `ultron status`, or None when not paused.
 
     Cheap: a single stat on $HERMES_HOME/ESTOP via agent.estop.
     """
@@ -129,7 +129,7 @@ def show_status(args):
 
     print()
     print(color("┌─────────────────────────────────────────────────────────┐", Colors.CYAN))
-    print(color("│                 ⚕ Jimmy Status                         │", Colors.CYAN))
+    print(color("│                ⚕ Ultron Status                         │", Colors.CYAN))
     print(color("└─────────────────────────────────────────────────────────┘", Colors.CYAN))
 
     _paused_line = _estop_status_line()
@@ -225,7 +225,7 @@ def show_status(args):
             get_qwen_auth_status,
             get_minimax_oauth_auth_status,
         )
-        # Read-only display: use the refresh-free snapshot so `hermes status`
+        # Read-only display: use the refresh-free snapshot so `ultron status`
         # never performs an OAuth refresh or burns a single-use refresh token.
         nous_status = get_nous_auth_status_local()
         codex_status = get_codex_auth_status()
@@ -290,7 +290,7 @@ def show_status(args):
     codex_logged_in = bool(codex_status.get("logged_in"))
     print(
         f"  {'OpenAI Codex':<12}  {check_mark(codex_logged_in)} "
-        f"{'logged in' if codex_logged_in else 'not logged in (run: hermes model)'}"
+        f"{'logged in' if codex_logged_in else 'not logged in (run: ultron model)'}"
     )
     codex_auth_file = codex_status.get("auth_store")
     if codex_auth_file:
@@ -319,7 +319,7 @@ def show_status(args):
     minimax_logged_in = bool(minimax_status.get("logged_in"))
     print(
         f"  {'MiniMax OAuth':<12}  {check_mark(minimax_logged_in)} "
-        f"{'logged in' if minimax_logged_in else 'not logged in (run: hermes auth add minimax-oauth)'}"
+        f"{'logged in' if minimax_logged_in else 'not logged in (run: ultron auth add minimax-oauth)'}"
     )
     minimax_region = minimax_status.get("region")
     if minimax_logged_in and minimax_region:
@@ -341,7 +341,7 @@ def show_status(args):
     xai_oauth_logged_in = bool(xai_oauth_status.get("logged_in"))
     print(
         f"  {'xAI OAuth':<12}  {check_mark(xai_oauth_logged_in)} "
-        f"{'logged in' if xai_oauth_logged_in else 'not logged in (run: hermes auth add xai-oauth)'}"
+        f"{'logged in' if xai_oauth_logged_in else 'not logged in (run: ultron auth add xai-oauth)'}"
     )
     xai_auth_file = xai_oauth_status.get("auth_store")
     if xai_auth_file:
@@ -374,7 +374,7 @@ def show_status(args):
             if key_val:
                 break
         configured = bool(key_val)
-        label = "configured" if configured else "not configured (run: hermes model)"
+        label = "configured" if configured else "not configured (run: ultron model)"
         print(f"  {pname:<16} {check_mark(configured)} {label}")
 
     # LM Studio reachability — only probe when it's the active provider so
@@ -514,7 +514,7 @@ def show_status(args):
         if snapshot.has_process_service_mismatch:
             print("  Service:      installed but not managing the current running gateway")
         elif _is_termux() and not snapshot.gateway_pids:
-            print("  Start with:   hermes gateway")
+            print("  Start with:   ultron gateway")
             print("  Note:         Android may stop background jobs when Termux is suspended")
         elif snapshot.service_installed and not snapshot.service_running:
             print("  Service:      installed but stopped")
@@ -675,6 +675,6 @@ def show_status(args):
 
     print()
     print(color("─" * 60, Colors.DIM))
-    print(color("  Run 'hermes doctor' for detailed diagnostics", Colors.DIM))
-    print(color("  Run 'hermes setup' to configure", Colors.DIM))
+    print(color("  Run 'ultron doctor' for detailed diagnostics", Colors.DIM))
+    print(color("  Run 'ultron setup' to configure", Colors.DIM))
     print()

@@ -9,7 +9,7 @@ Pick one:
 
 ```bash
 # Interactive: walks you through credentials + SDK install + enable
-hermes tools  # → Langfuse Observability
+ultron tools  # → Langfuse Observability
 
 # Manual
 pip install langfuse
@@ -18,7 +18,7 @@ hermes plugins enable observability/langfuse
 
 ## Required credentials
 
-Set these in `~/.hermes/.env` (or via `hermes tools`):
+Set these in `~/.hermes/.env` (or via `ultron tools`):
 
 ```bash
 HERMES_LANGFUSE_PUBLIC_KEY=pk-lf-...
@@ -33,7 +33,7 @@ open.
 
 ```bash
 hermes plugins list                 # observability/langfuse should show "enabled"
-hermes chat -q "hello"              # then check Langfuse for a "Hermes turn" trace
+ultron chat -q "hello"              # then check Langfuse for a "Hermes turn" trace
 ```
 
 Generation observations include the Hermes system prompt when the provider

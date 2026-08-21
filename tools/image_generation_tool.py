@@ -3,7 +3,7 @@
 Image Generation Tools Module
 
 Provides image generation via FAL.ai. Multiple FAL models are supported and
-selectable via ``hermes tools`` → Image Generation; the active model is
+selectable via ``ultron tools`` → Image Generation; the active model is
 persisted to ``image_gen.model`` in ``config.yaml``.
 
 Architecture:
@@ -1198,7 +1198,7 @@ def image_generate_tool(
                 f"Model '{meta.get('display', model_id)}' ({model_id}) is not "
                 f"capable of image-to-image / editing. Provide a text-only "
                 f"prompt (omit image_url), or switch to an edit-capable model "
-                f"via `hermes tools` → Image Generation."
+                f"via `ultron tools` → Image Generation."
             )
 
         aspect_lc = (aspect_ratio or DEFAULT_ASPECT_RATIO).lower().strip()
@@ -1350,7 +1350,7 @@ def _build_no_backend_setup_message() -> str:
             "To enable image generation, do one of:",
             "  1. Get a free API key at https://fal.ai and set "
             "FAL_KEY=<your-key> (then restart the session)",
-            "  2. Configure a different image_gen provider via `hermes tools` "
+            "  2. Configure a different image_gen provider via `ultron tools` "
             "→ Image Generation (run `hermes plugins list` to see installed "
             "backends)",
         ]
@@ -1646,7 +1646,7 @@ def _dispatch_to_plugin_provider(
                     f"support image-to-image / editing (its generate() "
                     f"signature is out of date with the image_generate schema). "
                     f"Omit image_url for text-to-image, or pick a backend that "
-                    f"supports editing via `hermes tools` → Image Generation."
+                    f"supports editing via `ultron tools` → Image Generation."
                 ),
                 "error_type": "modality_unsupported",
             })
@@ -1828,7 +1828,7 @@ def _handle_image_generate(args, **kw):
 # model up front ("the active model is text-to-image only — image_url will be
 # rejected") saves a wasted turn. Memoized by config.yaml mtime in
 # model_tools.get_tool_definitions(), so it rebuilds when the user switches
-# model/provider via `hermes tools` or `/skills`.
+# model/provider via `ultron tools` or `/skills`.
 
 
 _GENERIC_IMAGE_DESCRIPTION = IMAGE_GENERATE_SCHEMA["description"]

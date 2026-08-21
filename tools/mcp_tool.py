@@ -3005,7 +3005,7 @@ class MCPServerTask:
         if not _ensure_mcp_sdk():
             raise ImportError(
                 f"MCP server '{self.name}' requires the 'mcp' Python SDK, but "
-                "it is not installed. Run `hermes setup` to install MCP support, "
+                "it is not installed. Run `ultron setup` to install MCP support, "
                 "then retry."
             )
 
@@ -7622,7 +7622,7 @@ def get_mcp_status() -> List[dict]:
 def probe_mcp_server_tools() -> Dict[str, List[tuple]]:
     """Temporarily connect to configured MCP servers and list their tools.
 
-    Designed for ``hermes tools`` interactive configuration — connects to each
+    Designed for ``ultron tools`` interactive configuration — connects to each
     enabled server, grabs tool names and descriptions, then disconnects.
     Does NOT register tools in the Hermes registry.
 

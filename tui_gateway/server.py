@@ -1194,7 +1194,7 @@ def _close_sessions_for_transport(
         else:
             # Point detached sessions at the drop sentinel (NOT real stdio) so
             # _ws_session_is_orphaned recognizes them and the grace-reap can
-            # actually fire; a standalone `hermes --tui` keeps real _stdio.
+            # actually fire; a standalone `ultron --tui` keeps real _stdio.
             session["transport"] = _detached_ws_transport
             detached += 1
             try:
@@ -1229,7 +1229,7 @@ _REAPER_SCAN_S = 300.0
 def _transport_is_dead(transport) -> bool:
     # _detached_ws_transport is the post-WS-disconnect drop sentinel; a session
     # parked on it has no live client. _stdio_transport is the REAL transport
-    # for a standalone `hermes --tui`, so it must NOT count as dead here (doing
+    # for a standalone `ultron --tui`, so it must NOT count as dead here (doing
     # so let the idle reaper evict healthy standalone TUI sessions).
     if transport is _detached_ws_transport:
         return True
@@ -1616,7 +1616,7 @@ def _launch_configured_cwd() -> str | None:
     process's in-memory TUI gateway. The Node PTY child receives a bridged
     ``TERMINAL_CWD`` env var, but this in-memory process does not — so reading
     the process env alone leaves a fresh chat starting in ``os.getcwd()``
-    (wherever ``hermes dashboard`` was launched) instead of the configured
+    (wherever ``ultron dashboard`` was launched) instead of the configured
     ``terminal.cwd``. Read config directly so changing ``terminal.cwd`` affects
     new in-memory TUI sessions too.
     """
@@ -2922,7 +2922,7 @@ def _ensure_session_db_row(session: dict) -> None:
       or the user's home), so stamping that would file every unpicked chat under
       a folder the user never chose. Those stay null and group under "No
       workspace", which is the desired default.
-    * A terminal session (``hermes`` / ``hermes --tui`` / CLI) is started from a
+    * A terminal session (``hermes`` / ``ultron --tui`` / CLI) is started from a
       directory the user deliberately ``cd``'d into — that IS the workspace, and
       it is also where the agent's terminal actually runs. Dropping it stranded
       the session with no cwd AND no git_repo_root, so the sidebar could never
@@ -3759,7 +3759,7 @@ def _note_skin_broadcast() -> None:
 
 def _broadcast_skin_if_changed() -> None:
     """Emit ``skin.changed`` when the active skin moved — the agent switched it
-    (``hermes config set display.skin``) OR edited the active skin's colors in
+    (``ultron config set display.skin``) OR edited the active skin's colors in
     place ("I don't like that coral" → tweak the YAML).
 
     Routes through the SAME live path as ``/skin`` so every surface (TUI + desktop)
@@ -4013,11 +4013,11 @@ def _resolve_session_platform() -> str:
       * ``HERMES_DESKTOP=1`` and ``HERMES_DESKTOP_TERMINAL`` unset → "desktop"
         (the chat-panel backend — a graphical React surface, not a terminal).
       * ``HERMES_DESKTOP_TERMINAL=1`` → "tui"
-        (``hermes --tui`` running in the desktop's embedded terminal pane;
+        (``ultron --tui`` running in the desktop's embedded terminal pane;
         it IS a TUI, just embedded. The clarifier attached to the tui hint
         in system_prompt.py tells the agent about the embedding.)
       * neither set → "tui"
-        (standalone ``hermes --tui``.)
+        (standalone ``ultron --tui``.)
     """
     if is_truthy_value(os.environ.get("HERMES_DESKTOP")) and not is_truthy_value(
         os.environ.get("HERMES_DESKTOP_TERMINAL")
@@ -4048,7 +4048,7 @@ def _config_model_target() -> tuple[str, str]:
 
     Unlike `_resolve_model()`, this never reads HERMES_MODEL /
     HERMES_INFERENCE_MODEL. Those env vars are a launch-scoped seed
-    (`hermes --tui -m <model>`, hosted-instance provisioning); if they
+    (`ultron --tui -m <model>`, hosted-instance provisioning); if they
     fed the per-turn sync, the seed would be replayed as a /model switch
     and persisted globally, or would pin the session so dashboard/CLI
     model changes never reach an open chat.
@@ -4064,7 +4064,7 @@ def _config_model_target() -> tuple[str, str]:
     elif isinstance(cfg_model, str):
         model = cfg_model.strip()
     # No fallback to _resolve_model() here: that reads HERMES_MODEL /
-    # HERMES_INFERENCE_MODEL, which `hermes --tui -m <model>` sets as a
+    # HERMES_INFERENCE_MODEL, which `ultron --tui -m <model>` sets as a
     # session-scoped seed for THIS launch. When config.yaml has no
     # model.default (custom-provider-only setups), falling back to the env
     # seed made the per-turn sync treat the -m flag as "the configured
@@ -4650,7 +4650,7 @@ def _load_enabled_toolsets(platform: str | None = None) -> list[str] | None:
 
     # Coding posture (base Hermes): with no explicit pin, collapse to the
     # coding toolset (+ enabled MCP servers) when sitting in a code workspace.
-    # The desktop app and `hermes --tui` both land here. See
+    # The desktop app and `ultron --tui` both land here. See
     # agent/coding_context.py. No config is loaded yet at this point, so we let
     # coding_selection() load it lazily (cli.py passes its already-resolved
     # CLI_CONFIG instead, purely to avoid a redundant read).
@@ -5208,7 +5208,7 @@ def _sync_agent_model_with_config(sid: str, session: dict) -> None:
             # This sync ADOPTS a config.yaml change into the live session; it
             # must never write config back. Without this, the flag/config
             # default (persist_switch_by_default=True) re-persisted whatever
-            # target the sync computed — the path that leaked `hermes --tui -m`
+            # target the sync computed — the path that leaked `ultron --tui -m`
             # into config.yaml as the permanent global model.
             persist_override=False,
         )
@@ -12979,7 +12979,7 @@ def _discover_repos_payload(
     """Merge filesystem-scanned repos (cached) with session-derived repo roots.
 
     Repo-first: the disk scan (persisted by `projects.record_repos`) surfaces
-    repos even with zero hermes sessions. Session-derived roots cover repos
+    repos even with zero ultron sessions. Session-derived roots cover repos
     outside the scan roots. Both are junk-filtered (hermes home subtree + bare
     home) and carry their session totals for the overview.
 
@@ -13453,16 +13453,16 @@ def _rank_slash_completions(
 def _cli_exec_blocked(argv: list[str]) -> str | None:
     """Return user hint if this argv must not run headless in the gateway process."""
     if not argv:
-        return "bare `hermes` is interactive — use `/hermes chat -q …` or run `hermes` in another terminal"
+        return "bare `hermes` is interactive — use `/ultron chat -q …` or run `hermes` in another terminal"
     a0 = argv[0].lower()
     if a0 == "setup":
-        return "`hermes setup` needs a full terminal — run it outside the TUI"
+        return "`ultron setup` needs a full terminal — run it outside the TUI"
     if a0 == "gateway":
-        return "`hermes gateway` is long-running — run it in another terminal"
+        return "`ultron gateway` is long-running — run it in another terminal"
     if a0 == "sessions" and len(argv) > 1 and argv[1].lower() == "browse":
-        return "`hermes sessions browse` is interactive — use /resume here, or run browse in another terminal"
+        return "`ultron sessions browse` is interactive — use /resume here, or run browse in another terminal"
     if a0 == "config" and len(argv) > 1 and argv[1].lower() == "edit":
-        return "`hermes config edit` needs $EDITOR in a real terminal"
+        return "`ultron config edit` needs $EDITOR in a real terminal"
     return None
 
 
@@ -13889,7 +13889,7 @@ def _format_live_history_output(session: dict) -> str:
     lines = ["Conversation History", "────────────────────────────────────────"]
     for idx, message in enumerate(messages, start=1):
         role = str(message.get("role") or "unknown")
-        label = "You" if role == "user" else "Jimmy" if role == "assistant" else role.title()
+        label = "You" if role == "user" else "Ultron" if role == "assistant" else role.title()
         text = str(message.get("text") or message.get("context") or "").strip()
         if len(text) > 400:
             text = f"{text[:400]}..."

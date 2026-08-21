@@ -38,7 +38,7 @@ not exist.
 Or manually:
 
 ```bash
-hermes config set memory.provider openviking
+ultron config set memory.provider openviking
 ```
 
 Add the connection settings to the active profile's `.env` file. For the

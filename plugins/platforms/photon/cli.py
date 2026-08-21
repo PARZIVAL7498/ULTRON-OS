@@ -41,7 +41,7 @@ from .sidecar_paths import resolve_sidecar_dir
 # non-None value and only resolve/derive when unset.
 _SIDECAR_DIR: Path | None = None
 # Written on npm failure so check_requirements() can surface the root cause
-# when called later (gateway start, hermes status). Cleared on success.
+# when called later (gateway start, ultron status). Cleared on success.
 _NPM_ERROR_LOG: Path | None = None
 
 
@@ -244,7 +244,7 @@ def _cmd_setup(args: argparse.Namespace) -> int:
             print(
                 "  ⚠ Project secret was regenerated. If the gateway is running, "
                 "restart it so the sidecar picks up the new secret:\n"
-                "      hermes gateway restart"
+                "      ultron gateway restart"
             )
     except Exception as e:
         print(f"spectrum provisioning failed: {e}", file=sys.stderr)
@@ -348,7 +348,7 @@ def _cmd_setup(args: argparse.Namespace) -> int:
 
     print()
     print("✓ Photon setup complete.")
-    print("  Start the gateway:  hermes gateway start")
+    print("  Start the gateway:  ultron gateway start")
     return 0
 
 
@@ -437,7 +437,7 @@ def _cmd_telemetry(args: argparse.Namespace) -> int:
         print(f"could not save PHOTON_TELEMETRY: {e}", file=sys.stderr)
         return 1
     print(f"✓ Spectrum telemetry turned {state} (PHOTON_TELEMETRY in ~/.hermes/.env)")
-    print("  Restart the gateway for the sidecar to pick it up:  hermes gateway restart")
+    print("  Restart the gateway for the sidecar to pick it up:  ultron gateway restart")
     return 0
 
 
@@ -503,7 +503,7 @@ def _install_sidecar() -> int:
 # ---------------------------------------------------------------------------
 # Gateway-setup entry point
 #
-# `hermes gateway setup` discovers platforms via the registry and calls each
+# `ultron gateway setup` discovers platforms via the registry and calls each
 # entry's zero-arg ``setup_fn``. Photon registers this function so it appears
 # in the unified setup wizard alongside every other channel — same onboarding
 # surface, no Photon-specific detour. It runs the identical device-login +
@@ -511,7 +511,7 @@ def _install_sidecar() -> int:
 # defaults (phone is prompted when stdin is a TTY).
 
 def gateway_setup() -> None:
-    """Run Photon first-time setup from the `hermes gateway setup` wizard."""
+    """Run Photon first-time setup from the `ultron gateway setup` wizard."""
     args = argparse.Namespace(
         photon_command="setup",
         project_name=None,

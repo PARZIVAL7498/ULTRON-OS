@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+"""
+Ultron Agent CLI launcher.
+
+This wrapper behaves like the installed `ultron` command, including
+subcommands such as `gateway`, `cron`, `model`, and `doctor`.
+"""
+
+if __name__ == "__main__":
+    from hermes_cli.main import main
+    main()

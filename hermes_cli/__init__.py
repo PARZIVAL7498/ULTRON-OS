@@ -1,14 +1,14 @@
 """
-Hermes CLI - Unified command-line interface for Hermes Agent.
+Ultron CLI - Unified command-line interface for Ultron Agent.
 
 Provides subcommands for:
-- hermes chat          - Interactive chat (same as ./hermes)
-- hermes gateway       - Run gateway in foreground
-- hermes gateway start - Start gateway service
-- hermes gateway stop  - Stop gateway service
-- hermes setup         - Interactive setup wizard
-- hermes status        - Show status of all components
-- hermes cron          - Manage cron jobs
+- ultron chat          - Interactive chat (same as ./ultron)
+- ultron gateway       - Run gateway in foreground
+- ultron gateway start - Start gateway service
+- ultron gateway stop  - Stop gateway service
+- ultron setup         - Interactive setup wizard
+- ultron status        - Show status of all components
+- ultron cron          - Manage cron jobs
 """
 
 import os

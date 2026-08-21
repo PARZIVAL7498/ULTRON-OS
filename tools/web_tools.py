@@ -3,7 +3,7 @@
 Standalone Web Tools Module
 
 This module provides generic web tools that work with multiple backend providers.
-Backend is selected during ``hermes tools`` setup (web.backend in config.yaml).
+Backend is selected during ``ultron tools`` setup (web.backend in config.yaml).
 When available, Hermes can route Firecrawl calls through a Nous-hosted tool-gateway
 for Nous Subscribers only.
 
@@ -114,7 +114,7 @@ def _env_value(name: str) -> str:
     """Resolve ``name`` via Hermes config-aware env, falling back to process env.
 
     Mirrors the SearXNG provider's ``_searxng_url()`` so that values set
-    through Hermes' config/.env layer (``hermes config set``, ``hermes tools``)
+    through Hermes' config/.env layer (``ultron config set``, ``ultron tools``)
     are honored here too — not just raw process-env exports. Without this,
     a config-only ``SEARXNG_URL`` (or any provider key) leaves the backend
     auto-detect cascade and ``check_web_api_key()`` blind to it. See #34290.
@@ -213,7 +213,7 @@ def _list_registered_web_providers():
 def _get_backend() -> str:
     """Determine which web backend to use (shared fallback).
 
-    Reads ``web.backend`` from config.yaml (set by ``hermes tools``). A
+    Reads ``web.backend`` from config.yaml (set by ``ultron tools``). A
     stored backend name is returned as-is — no availability probe, no
     fallback — so the vendor path can raise its own honest error when the
     selection is broken. The credential/entitlement autodetect ladder runs
@@ -389,7 +389,7 @@ def _is_backend_available(backend: str) -> bool:
         # Cheap probe — env var OR auth.json has OAuth tokens. Must not
         # call resolve_xai_http_credentials() here because the OAuth path
         # can trigger a network token refresh, and _is_backend_available
-        # runs on every web_search dispatch + every `hermes tools` repaint.
+        # runs on every web_search dispatch + every `ultron tools` repaint.
         try:
             from tools.xai_http import has_xai_credentials
             return has_xai_credentials()
@@ -938,7 +938,7 @@ def web_search_tool(query: str, limit: int = 5) -> str:
                     "success": False,
                     "error": (
                         "No web search provider configured. "
-                        "Run `hermes tools` to set one up."
+                        "Run `ultron tools` to set one up."
                     ),
                 }
         else:
@@ -1353,7 +1353,7 @@ def _provider_is_ready(provider) -> bool:
     ``get_active_*_provider()`` intentionally returns an explicitly configured
     backend even when ``is_available()`` is False so the dispatcher can emit a
     precise missing-credential error. Tool/doctor readiness gates must still
-    require a true availability probe — otherwise ``hermes doctor`` paints a
+    require a true availability probe — otherwise ``ultron doctor`` paints a
     green ✓ for a backend that cannot run (issue #78412).
 
     A provider that can serve anonymously (``is_keyless_available()`` — the
