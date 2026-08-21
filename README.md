@@ -65,6 +65,49 @@ source ~/.bashrc    # reload shell (or: source ~/.zshrc)
 hermes              # start chatting!
 ```
 
+---
+
+### Cloned Repository / Local Setup (From Source)
+
+If you have cloned this repository locally or are developing directly from the source tree:
+
+#### Linux, macOS, WSL2, Termux (Automated Script)
+Run the built-in setup script:
+```bash
+chmod +x setup-hermes.sh
+./setup-hermes.sh
+```
+This script will:
+1. Locate or install `uv` (or use standard `venv` + `pip` on Termux).
+2. Create a Python 3.11 virtual environment (`venv`).
+3. Install dependencies with hash verification via `uv.lock`.
+4. Copy `.env.example` to `.env` if not already present.
+5. Symlink the `hermes` CLI executable into your PATH (`~/.local/bin` or `$PREFIX/bin`).
+6. Run the interactive setup wizard.
+
+#### Windows (Native PowerShell / CMD)
+```powershell
+# 1. Create a virtual environment (Python 3.11 recommended)
+uv venv venv --python 3.11
+# Or with standard Python: python -m venv venv
+
+# 2. Activate the virtual environment
+.\venv\Scripts\activate
+
+# 3. Install dependencies
+uv sync --extra all --locked
+# Or with pip: pip install -e ".[all]"
+
+# 4. Configure environment variables
+Copy-Item .env.example .env
+# Edit .env and configure your API keys (e.g., OPENAI_API_KEY, OPENROUTER_API_KEY)
+
+# 5. Launch the agent
+python ultron
+# or: .\ultron.cmd
+# or: python cli.py setup
+```
+
 ### Troubleshooting
 
 #### Windows Defender or antivirus flags `uv.exe` as malware
